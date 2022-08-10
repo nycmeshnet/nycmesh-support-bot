@@ -75,5 +75,5 @@ class DatabaseClient:
 
 if __name__ == '__main__':
     database_client = DatabaseClient()
-    name = database_client.name_to_nn("Fedor Garin")
+    name = database_client.name_to_nn("test")
     print(name)
