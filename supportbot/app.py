@@ -15,7 +15,6 @@ def run_app(config):
 
     slack_credentials = load_credentials(config['credentials_path'])
     app = App(token=slack_credentials["SLACK_BOT_TOKEN"])
-    SocketModeHandler(app, slack_credentials["SLACK_APP_TOKEN"]).start()
 
     @app.event(
         event={"type": "message", "subtype": None},
@@ -42,3 +41,5 @@ def run_app(config):
     def handle_message_events():
         """This handler silences warnings about "unhandled" message events"""
         pass
+
+    SocketModeHandler(app, slack_credentials["SLACK_APP_TOKEN"]).start()
