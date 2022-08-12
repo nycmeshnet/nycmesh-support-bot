@@ -114,7 +114,7 @@ Project Link: [https://github.com/andybaumgar/nycmesh-support-bot](https://githu
 
 [contributors-shield]: https://img.shields.io/github/contributors/andybaumgar/nycmesh-support-bot.svg
 [contributors-url]: https://github.com/andybaumgar/nycmesh-support-bot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/andybaumgar/nycmesh-support-bot.svg
+[forks-shield]: https://img.shields.io/github/forks/andybaumgar/nycmesh-support-bot.svg
 [forks-url]: https://github.com/andybaumgar/nycmesh-support-bot/network/members
 [stars-shield]: https://img.shields.io/github/stars/andybaumgar/nycmesh-support-bot.svg
 [stars-url]: https://github.com/andybaumgar/nycmesh-support-bot/stargazers
