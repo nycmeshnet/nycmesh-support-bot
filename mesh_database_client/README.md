@@ -1,0 +1,1 @@
+generate new requirements.txt with pipreqs
