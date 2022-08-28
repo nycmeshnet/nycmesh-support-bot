@@ -1,4 +1,4 @@
-import mesh_database_client.database
+import mesh_database_client
 import os
 from dotenv import load_dotenv
 
@@ -7,7 +7,7 @@ load_dotenv()
 # spreadsheet_id = os.environ.get("SPREADSHEET_ID")
 spreadsheet_id = os.environ.get("SPREADSHEET_ID_TEST")
 
-database_client = mesh_database_client.database.DatabaseClient(spreadsheet_id=spreadsheet_id)
+database_client = mesh_database_client.DatabaseClient(spreadsheet_id=spreadsheet_id)
 
 def test_name_to_nn():
     nn = database_client.name_to_nn("Heather Gibson")

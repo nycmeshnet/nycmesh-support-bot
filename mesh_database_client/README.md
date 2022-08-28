@@ -1,1 +1,2 @@
-generate new requirements.txt with pipreqs
+## Updating packages
+[pipreqs](https://pypi.org/project/pipreqs/) can be used to update packages.

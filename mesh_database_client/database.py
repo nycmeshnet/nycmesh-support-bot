@@ -18,37 +18,53 @@ class DatabaseClient:
 
     def __init__(self, spreadsheet_id = None):
 
-        if spreadsheet_id is None:
+        self.spreadsheet_id = spreadsheet_id
+        if self.spreadsheet_id is None:
             self.spreadsheet_id = os.environ.get("SPREADSHEET_ID")
-        else:
-            self.spreadsheet_id = spreadsheet_id
 
         SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
         # created in Google Cloud admin
         SERVICE_ACCOUNT_FILE = 'credentials.json'
 
-        signup_sheet_range = 'Form Responses 1!A:AO'
-        links_sheet_range = 'Links!A:I'
-
-        CREDS = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-
-        self.service = build('sheets', 'v4', credentials=CREDS)
+        credentials_dict = self._get_sheets_credentials_from_env()
+        credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+        self.service = build('sheets', 'v4', credentials=credentials)
 
         # Call the Sheets API
         self.sheet = self.service.spreadsheets()
 
-        # load all data into dataframe
-        self.signup_df = self.get_range_as_df(signup_sheet_range)
-        self.links_df = self.get_range_as_df(links_sheet_range)
-
-        self.process_signup_df()
-        self.process_links_df()
-
-        # drop last signup_df column which does not contain data
-        self.signup_df.drop(self.signup_df.tail(1).index,inplace=True)
+        self.signup_df = self.get_signup_df()
+        self.links_df = self.get_links_df()
 
         self.gmaps = googlemaps.Client(key=os.environ.get("MAPS_API"))
+
+    def _get_sheets_credentials_from_env(self):
+        try:
+            credentials_mapping = {
+                "type": "GOOGLE_SHEETS_TYPE",
+                "project_id": "GOOGLE_SHEETS_PROJECT_ID",
+                "private_key_id": "GOOGLE_SHEETS_PRIVATE_KEY_ID",
+                "private_key": "GOOGLE_SHEETS_PRIVATE_KEY",
+                "client_email": "GOOGLE_SHEETS_CLIEND_EMAIL",
+                "client_id": "GOOGLE_SHEETS_CLIENT_ID",
+                "auth_uri": "GOOGLE_SHEETS_AUTH_URI",
+                "token_uri": "GOOGLE_SHEETS_TOKEN_URI",
+                "auth_provider_x509_cert_url" : "GOOGLE_SHEETS_AUTH_PROVIDER_X509_CERT_URL",
+                "client_x509_cert_url" : "GOOGLE_SHEETS_CLIENT_509_CERT_URL"
+            }
+
+            credentials = {}
+            for key, value in credentials_mapping.items():
+                credentials[key] = os.environ.get(value)
+
+            credentials['private_key'] = credentials['private_key'].replace('\\n', '\n')
+
+            return credentials
+        except Exception as e:
+            print(e)
+            raise ValueError('Problem parsing Google Sheets credentials')
+
+
 
     def get_range_as_df(self, range):
         result = self.sheet.values().get(spreadsheetId=self.spreadsheet_id,range=range).execute()
@@ -57,8 +73,8 @@ class DatabaseClient:
         df = pd.DataFrame(values[1:], columns = values[0])
         return df
 
-    def process_signup_df(self):
-        df = self.signup_df
+    def get_signup_df(self):
+        df = self.get_range_as_df('Form Responses 1!A:AO')
  
         # force columns to be specific type
         df['NN'] = (pd.to_numeric(df['NN'], errors="coerce")
@@ -67,12 +83,14 @@ class DatabaseClient:
 
         df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
         df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
+
+        df.drop(df.tail(1).index,inplace=True)
          
-        self.signup_df = df
+        return df
 
 
-    def process_links_df(self):
-        df = self.links_df
+    def get_links_df(self):
+        df = self.get_range_as_df('Links!A:I')
 
         # force columns to be specific type
         df = df.astype({'to':'float'})
@@ -80,7 +98,7 @@ class DatabaseClient:
         df = df.astype({'to':'int'})
         df = df.astype({'from':'int'})
         
-        self.links_df = df
+        return df
 
     def name_to_nn(self, name):
         signup_df = self.signup_df
@@ -100,9 +118,6 @@ class DatabaseClient:
             return entry['NN']
         else:
             return None
-
-    def deg_to_feet(deg):
-        return deg * 288200
 
     def address_to_nn(self, address):
         signup_df = self.signup_df

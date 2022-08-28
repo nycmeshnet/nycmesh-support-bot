@@ -156,4 +156,4 @@ credentials.json
 
 *.pyc
 discussion.txt
-tests/Test New Node Form (Responses).xlsx
+*.xlsx
