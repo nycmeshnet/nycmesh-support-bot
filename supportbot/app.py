@@ -4,6 +4,7 @@ from functools import partial
 from slack_bolt import App
 
 from supportbot.request_handler import handle_support_request
+from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
 from supportbot.utils.credentials import load_credentials
 from supportbot.utils.message_classification import is_in_support_channel, user_needs_help
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -36,50 +37,11 @@ def run_app(config):
 
         resp = client.views_open(
             trigger_id=shortcut["trigger_id"],
-            view={
-                "type": "modal",
-                "callback_id": "manually_run_diagnostics",
-                "private_metadata": json.dumps({
-                    'channel': shortcut['channel']['id'],
-                    'ts': shortcut['message_ts'],
-                    'user': shortcut['message']['user']
-                }),
-                "title": {
-                    "type": "plain_text",
-                    "text": "Run node diagnostics?",
-                    "emoji": True
-                },
-                "submit": {
-                    "type": "plain_text",
-                    "text": "Submit",
-                    "emoji": True
-                },
-                "close": {
-                    "type": "plain_text",
-                    "text": "Cancel",
-                    "emoji": True
-                },
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Are you sure you would like to run diagnostics for this message? This will "
-                                    f"cause the support bot look up <@{shortcut['message']['user']}>'s network number and connect to "
-                                    "their node to provide diagnostic information. "
-                        }
-                    },
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "The bot will respond in-thread with the diagnostic information"
-                            }
-                        ]
-                    }
-                ]
-            }
+            view=confrimation_dialog_block_kit(
+                shortcut['channel']['id'],
+                shortcut['message_ts'],
+                shortcut['message']['user']
+            )
         )
         print(resp)
 
