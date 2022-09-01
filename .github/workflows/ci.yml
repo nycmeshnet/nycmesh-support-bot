@@ -1,0 +1,60 @@
+name: CI/CD
+on: [push]
+jobs:
+  Test:
+    runs-on: [self-hosted, daniel-server]
+    env: 
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo $USER
+      - run: pwd
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by ${{runner.hostname}}!"
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The repository has been cloned to the runner."
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' 
+      - name: Generate .env from GitHub secrets
+        run: |
+          echo $SECRETS_CONTEXT
+          python env_json_to_dotenv.py SECRETS_CONTEXT
+      - name: Build and run tests 🧪
+        run: |
+          docker build -t nycmesh-support-bot-test .
+          docker run -v "$PWD/.env:/app/.env" --rm nycmesh-support-bot-test pytest
+  Build:
+    runs-on: [self-hosted, daniel-server]
+    needs: Test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Login to Dockerhub
+        run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Build image
+        run: docker build . -t andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+      - name: Push to dockerhub
+        run: docker push andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+  Deploy:
+    runs-on: [self-hosted, daniel-server]
+    env: 
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}
+    needs: [Test, Build]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Pull from Dockerhub
+        run: docker pull andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Generate .env from GitHub secrets
+        run: |
+          echo $SECRETS_CONTEXT
+          python env_json_to_dotenv.py SECRETS_CONTEXT
+      - name: Stop old container
+        run: docker stop nycmesh-support-bot || true
+      - name: Run app
+        run: docker run -d --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+      # deploy tests?

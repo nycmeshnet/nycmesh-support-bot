@@ -99,7 +99,25 @@ The `supportbot-server` command is configurable via a few CLI arguments. Use
 `supportbot-server --help` to learn more about the available options.
 
 ## Deploy Process
-[Github Actions Self Hosted Runner](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners)
+
+The supportbot uses GitHub Actions Docker and DockerHub for CI/CD. The [GitHub Actions workflow file](/.github/workflows/ci.yml) describes the process.
+
+## Secrets
+
+Secrets are stored in GitHub Secrets, and locally in a `.env` file. In production a [script](env_json_to_dotenv.py) is used to convert the GitHub Secrets to `.env`.
+
+### GitHub Actions/Runner setup
+
+[Github Actions Self Hosted Runner setup description](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners)
+
+#### Starting and Stopping the Runner
+An extra command is used to setup the runner as a service:
+```
+cd /home/supportbot/actions-runner
+sudo ./svc.sh start
+```
+
+
 
 ## Built With
 
