@@ -19,6 +19,27 @@ The server connects to the Slack API via websockets, bypassing the need for a pu
 
 ## Getting Started
 
+### Running with Docker
+
+- install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- start Docker Desktop
+- clone the repo and open a shell in the root folder
+- run the following commands:
+```shell
+docker compose build
+docker compose run app
+```
+
+### Testing with Docker
+ 
+- follow the directions above for running
+- run the following commands:
+```shell
+docker compose run test
+```
+
+Note: The Docker dev workflow is currently in progress.  Check back for features like autoreload, debugger integration etc.  Until then testing outside Docker is preferable. 
+
 ### Prerequisites
 You'll need `python` and `pip` to install this client. Confirm these are available with:
 ```shell

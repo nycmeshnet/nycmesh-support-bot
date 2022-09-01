@@ -153,6 +153,8 @@ cython_debug/
 
 # Our Slack credentials file
 credentials.json
+credentials-old.json
 
 *.pyc
 discussion.txt
+*.xlsx
