@@ -10,7 +10,7 @@ import pandas as pd
 import os
 import googlemaps
 from dotenv import load_dotenv
-from numpy import sqrt 
+from numpy import sqrt
 
 load_dotenv()
 
