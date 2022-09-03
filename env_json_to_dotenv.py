@@ -1,4 +1,4 @@
-# Description: Takes 1 arguement with name of environment variable which contains JSON representation of .env secrets and writes actual .env file.  Allows many GitHub Secrets to be passed through into Docker environment together without hardcoding.
+# Description: Takes 1 arguement with name of environment variable which contains JSON representation of .env secrets and writes actual .env file.  Allows many GitHub Secrets to be passed through into Docker container together without hardcoding.
 
 import json
 import sys
