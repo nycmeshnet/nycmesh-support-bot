@@ -14,10 +14,20 @@ def test_name_to_nn():
     print(nn)
     assert nn==1612
 
+def test_name_to_nn_no_node():
+    nn = database_client.name_to_nn("Angela Johnston")
+    print(nn)
+    assert nn is None
+
 def test_email_to_nn():
     nn = database_client.email_to_nn("Andrea.Gray@test.com")
     print(nn)
     assert nn == 2111
+
+def test_email_to_nn_no_node():
+    nn = database_client.email_to_nn("Angela.Johnston@test.com")
+    print(nn)
+    assert nn is None
 
 def test_address_to_nn():
     nn = database_client.address_to_nn("227 Madison St, Manhattan, NY 10002")
@@ -28,6 +38,7 @@ def test_nn_to_linked_nn():
     nodes = database_client.nn_to_linked_nn(2699)
     print(nodes)
     assert nodes == [844, 2090, 2645]
+    
 
 def test_nn_to_linked_nn_too_large():
     nodes = database_client.nn_to_linked_nn(100000)
@@ -35,4 +46,4 @@ def test_nn_to_linked_nn_too_large():
     assert nodes == []
 
 if __name__ == '__main__':
-    test_address_to_nn()
+    test_email_to_nn_no_node()
