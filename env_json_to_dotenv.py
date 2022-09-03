@@ -4,7 +4,8 @@ import json
 import sys
 import os
 
-secrets_var = sys.args[1]
+args = sys.argv
+secrets_var = sys.argv[1]
 
 secrets_json_string = os.environ[secrets_var]
 secrets = json.loads(secrets_json_string)
