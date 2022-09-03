@@ -103,21 +103,27 @@ class DatabaseClient:
     def name_to_nn(self, name):
         signup_df = self.signup_df
         name_df = signup_df[signup_df['Name'].str.contains(name, case=False)]
-        if not name_df.empty:
-            entry = name_df.iloc[0]
-            return entry['NN']
-        else:
+        
+        if name_df.empty:
             return None
+        
+        entry = name_df.iloc[0]
+        if (nn := entry['NN']) == 0:
+            return None
+        return nn
 
     def email_to_nn(self, email):
         # TODO multiple emails recency
         signup_df = self.signup_df
         email_df = signup_df[signup_df['Email'].str.contains(email, case=False)]
-        if not email_df.empty:
-            entry = email_df.iloc[0]
-            return entry['NN']
-        else:
+        
+        if email_df.empty:
             return None
+
+        entry = email_df.iloc[0]
+        if (nn := entry['NN']) == 0:
+            return None
+        return nn
 
     def address_to_nn(self, address):
         signup_df = self.signup_df
@@ -141,6 +147,10 @@ class DatabaseClient:
 
         min_index = distance.idxmin()
         closest = signup_df.iloc[min_index]
+
+        if closest['NN'] == 0:
+            return None
+
         return closest['NN']
 
 
