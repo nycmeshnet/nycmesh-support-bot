@@ -2,7 +2,7 @@ name: CI/CD
 on: [push]
 jobs:
   Test:
-    runs-on: [self-hosted, daniel-server]
+    runs-on: [ubuntu-latest]
     env: 
       SECRETS_CONTEXT: ${{ toJson(secrets) }}
     steps:
@@ -25,7 +25,7 @@ jobs:
           docker build -t nycmesh-support-bot-test .
           docker run -v "$PWD/.env:/app/.env" --rm nycmesh-support-bot-test pytest
   Build:
-    runs-on: [self-hosted, daniel-server]
+    runs-on: [ubuntu-latest]
     needs: Test
     if: github.ref == 'refs/heads/main'
     steps:
