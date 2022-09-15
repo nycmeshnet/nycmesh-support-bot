@@ -42,11 +42,11 @@ class MeshUser:
             return int(slack_network_number['value'])
 
         email_network_number = self._database_client.email_to_nn(self.email)
-        if email_network_number and email_network_number != 0:
+        if email_network_number is not None:
             return int(email_network_number)
 
         name_network_number = self._database_client.name_to_nn(self.full_name)
-        if name_network_number and name_network_number != 0:
+        if name_network_number is not None:
             return int(name_network_number)
 
         # We haven't found a network number, return None
