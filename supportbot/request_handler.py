@@ -10,8 +10,9 @@ def handle_support_request(app, config, user_id, channel_id, message_ts):
         thread_ts=message_ts,
         text=f"This is a reply to <@{user_id}>! It looks like "
              f"your email is {user.email} {'and' if user.network_number else 'but'} your network number "
-             f"{'is ' + user.network_number if user.network_number else 'could not be found'}. "
+             f"{'is ' + str(user.network_number) if user.network_number else 'could not be found'}. "
              f"Here's a diagnostics report to help our volunteers:",
     )
 
-    upload_report_file(app, "DATA\n" * 43, channel_id, message_ts, user.network_number)
+    if user.network_number:
+        upload_report_file(app, "DATA\n" * 43, channel_id, message_ts, user.network_number)
