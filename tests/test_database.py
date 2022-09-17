@@ -14,6 +14,14 @@ def test_name_to_nn():
     print(nn)
     assert nn==1612
 
+def test_messy_name_to_nn():
+    nn1 = database_client.name_to_nn("Heath M Gibson")
+    nn2 = database_client.name_to_nn("Heather GlibsoN")
+    nn3 = database_client.name_to_nn("H Gibson")
+    assert nn1==1612
+    assert nn2==1612
+    assert nn3==1612
+
 def test_name_to_nn_no_node():
     nn = database_client.name_to_nn("Angela Johnston")
     print(nn)
@@ -46,4 +54,4 @@ def test_nn_to_linked_nn_too_large():
     assert nodes == []
 
 if __name__ == '__main__':
-    test_email_to_nn_no_node()
+    test_messy_name_to_nn()

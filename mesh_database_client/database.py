@@ -11,6 +11,8 @@ import os
 import googlemaps
 from dotenv import load_dotenv
 from numpy import sqrt
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 load_dotenv()
 
@@ -102,15 +104,30 @@ class DatabaseClient:
 
     def name_to_nn(self, name):
         signup_df = self.signup_df
-        name_df = signup_df[signup_df['Name'].str.contains(name, case=False)]
+
+        # search with simple lowercase comparison
+        match_df = signup_df[signup_df['Name'].str.match(name, case=False)]
+        if (not match_df.empty) and ((nn := match_df.iloc[0]['NN']) != 0):
+            return nn
         
-        if name_df.empty:
-            return None
+        # search using edit distance
+        name_similarity = pd.Series([fuzz.ratio(name.lower(), x.lower()) for x in list(signup_df['Name'])])
+        signup_df['name_similarity'] = name_similarity
+        max_similarity = max(name_similarity)
+
+        print(f'max_similarity:{max_similarity}')
         
-        entry = name_df.iloc[0]
-        if (nn := entry['NN']) == 0:
+        # print(signup_df.sort_values(by=['name_similarity'], ascending=False)[['Name', 'name_similarity']].head(10))
+
+        index = name_similarity.idxmax()
+        closest = signup_df.iloc[index]
+
+        # too different
+        if closest['NN'] == 0 or max_similarity < 85:
             return None
-        return nn
+
+        return closest['NN']
+        
 
     def email_to_nn(self, email):
         # TODO multiple emails recency
@@ -140,13 +157,12 @@ class DatabaseClient:
         distance = sqrt(lat_diff**2 + lng_diff**2)
         signup_df['distance'] = distance
         min_distance = distance.min()
+        index = distance.idxmin()
+        closest = signup_df.iloc[index]
 
         # check if closest signup request is further than 200ft
         if min_distance > 200:
             return None
-
-        min_index = distance.idxmin()
-        closest = signup_df.iloc[min_index]
 
         if closest['NN'] == 0:
             return None

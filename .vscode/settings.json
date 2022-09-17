@@ -3,5 +3,11 @@
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "workbench.statusBar.visible": true,
+    "workbench.colorCustomizations": {
+    "statusBar.background" : "#785000",
+    "statusBar.noFolderBackground" : "#212121",
+    "statusBar.debuggingBackground": "#263238"
+}
 }
