@@ -1,0 +1,6 @@
+uisp:
+  # x-auth-token:  # DON'T FILL ME IN (SECURITY RISK) POPULATE THIS PARAMETER VIA THE .env FILE
+  hostname: uisp.mesh
+  scheme: https
+  skip-verify-tls: true # true needed for self-signed certs
+  debug: true
