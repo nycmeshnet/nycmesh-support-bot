@@ -24,10 +24,11 @@ The server connects to the Slack API via websockets, bypassing the need for a pu
 - install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - start Docker Desktop
 - clone the repo and open a shell in the root folder
+- ensure you have a .env file with all required credentials
 - run the following commands:
 ```shell
-docker compose build
-docker compose run app
+docker build . -t supportbot
+docker run --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" supportbot
 ```
 
 ### Testing with Docker
@@ -35,10 +36,9 @@ docker compose run app
 - follow the directions above for running
 - run the following commands:
 ```shell
-docker compose run test
+docker build . -t supportbot
+docker run -v "$PWD/.env:/app/.env" --rm nycmesh-support-bot-test pytest
 ```
-
-Note: The Docker dev workflow is currently in progress.  Check back for features like autoreload, debugger integration etc.  Until then testing outside Docker is preferable. 
 
 ### Prerequisites
 You'll need `python` and `pip` to install this client. Confirm these are available with:
@@ -71,19 +71,10 @@ pip install -e .
 
 ### Credentials
 
-The bot needs Slack API credentials to operate. By default, it looks for them in 
-`credentials.json` (configurable with the `--credentials` flag). 
+The bot needs Slack API credentials to operate. They are supplied in the .env file.
 
 You can obtain credentials for a Slack workspace by creating a socket-mode app following
 [these instructions](https://api.slack.com/apis/connections/socket).
-
-Once you have the credentials, use the following syntax to create the `credentials.json` file:
-```json
-{
-  "SLACK_APP_TOKEN": "<THE_SLACK_APP_TOKEN>",
-  "SLACK_BOT_TOKEN": "<THE_SLACK_BOT_TOKEN>"
-} 
-```
 
 ### Usage
 
