@@ -5,16 +5,18 @@ from slack_bolt import App
 
 from supportbot.request_handler import handle_support_request
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
-from supportbot.utils.credentials import load_credentials
 from supportbot.utils.message_classification import is_in_support_channel, user_needs_help
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def run_app(config):
     print("Starting bolt app...")
 
-    slack_credentials = load_credentials(config['credentials_path'])
-    app = App(token=slack_credentials["SLACK_BOT_TOKEN"])
+    app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
     @app.event(
         event={"type": "message", "subtype": None},
@@ -52,4 +54,4 @@ def run_app(config):
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'])
 
 
-    SocketModeHandler(app, slack_credentials["SLACK_APP_TOKEN"]).start()
+    SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()
