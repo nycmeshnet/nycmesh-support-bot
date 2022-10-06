@@ -1,5 +1,5 @@
 import datetime
-
+import subprocess
 
 def upload_report_file(app, report_txt, channel_id, thread_id, network_number):
     timestamp = datetime.datetime.now()
@@ -12,3 +12,8 @@ def upload_report_file(app, report_txt, channel_id, thread_id, network_number):
         thread_ts=thread_id
     )
     return response['file']['id']
+
+def get_report(nn):
+    command = ['nn_stats.sh', str(nn)]
+    result = subprocess.run(command, capture_output=True, text=True).stdout
+    return result
