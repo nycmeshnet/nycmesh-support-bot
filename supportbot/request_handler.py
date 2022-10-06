@@ -1,6 +1,7 @@
-from supportbot.utils.diagnostics_report import upload_report_file
+from webbrowser import get
+from supportbot.utils.diagnostics_report import upload_report_file, get_report
 from supportbot.utils.user_data import MeshUser
-
+import subprocess
 
 def handle_support_request(app, config, user_id, channel_id, message_ts):
     user = MeshUser(app, user_id, config['nn_property_id'])
@@ -14,5 +15,14 @@ def handle_support_request(app, config, user_id, channel_id, message_ts):
              f"Here's a diagnostics report to help our volunteers:",
     )
 
+    app.client.chat_postMessage(
+        channel=channel_id,
+        thread_ts=message_ts,
+        text=f"Diagnostics running...",
+    )
+
     if user.network_number:
-        upload_report_file(app, "DATA\n" * 43, channel_id, message_ts, user.network_number)
+
+        report = get_report(user.network_number)
+
+        upload_report_file(app, report, channel_id, message_ts, user.network_number)
