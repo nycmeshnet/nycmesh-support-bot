@@ -24,7 +24,7 @@ RUN pip3 install -r requirements.txt
 # Note: .env file is not coppied due to .dockerignore.  When deploying to server .env is recreated though GitHub actions secrets and then liked to container through a volume.
 COPY . .
 
-# RUN chmod u+r+x bin/nn_stats.sh
+RUN chmod u+r+x bin/nn_stats.sh
 ENV PATH="${PATH}:/app/bin"
 
 RUN pip3 install -e .
