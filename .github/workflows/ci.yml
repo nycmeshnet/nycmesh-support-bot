@@ -37,24 +37,24 @@ jobs:
         run: docker build . -t andybaumgar/nycmesh-support-bot:$GITHUB_SHA
       - name: Push to dockerhub
         run: docker push andybaumgar/nycmesh-support-bot:$GITHUB_SHA
-#   Deploy:
-#     runs-on: [self-hosted, daniel-server]
-#     env: 
-#       SECRETS_CONTEXT: ${{ toJson(secrets) }}
-#     needs: [Test, Build]
-#     if: github.ref == 'refs/heads/main'
-#     steps:
-#       - name: Pull from Dockerhub
-#         run: docker pull andybaumgar/nycmesh-support-bot:$GITHUB_SHA
-#       - uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.9'
-#       - name: Generate .env from GitHub secrets
-#         run: |
-#           echo $SECRETS_CONTEXT
-#           python env_json_to_dotenv.py SECRETS_CONTEXT
-#       - name: Stop old container
-#         run: docker stop nycmesh-support-bot || true
-#       - name: Run app
-#         run: docker run -d --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
-#       # deploy tests?
+  Deploy:
+    runs-on: [self-hosted, daniel-server]
+    env: 
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}
+    needs: [Test, Build]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Pull from Dockerhub
+        run: docker pull andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Generate .env from GitHub secrets
+        run: |
+          echo $SECRETS_CONTEXT
+          python env_json_to_dotenv.py SECRETS_CONTEXT
+      - name: Stop old container
+        run: docker stop nycmesh-support-bot || true
+      - name: Run app
+        run: docker run -d --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
+      # deploy tests?
