@@ -56,5 +56,5 @@ jobs:
 #       - name: Stop old container
 #         run: docker stop nycmesh-support-bot || true
 #       - name: Run app
-#         run: docker run -d --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA
+#         run: docker run -d --name nycmesh-support-bot --rm -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
 #       # deploy tests?
