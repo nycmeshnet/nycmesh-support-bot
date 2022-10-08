@@ -27,6 +27,8 @@ COPY . .
 RUN chmod u+r+x bin/nn_stats.sh
 ENV PATH="${PATH}:/app/bin"
 
+ENV PYTHONUNBUFFERED=True
+
 RUN pip3 install -e .
 
 CMD supportbot-server

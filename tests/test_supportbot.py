@@ -11,8 +11,8 @@ load_dotenv()
 def test_env():
     assert os.environ.get("SLACK_BOT_TOKEN") and os.environ.get("SLACK_APP_TOKEN")
 
-def test_get_report():
-    get_report(458)
+# def test_get_report():
+#     get_report(458)
 
-if __name__ == '__main__':
-    test_get_report()
+# if __name__ == '__main__':
+#     test_get_report()
