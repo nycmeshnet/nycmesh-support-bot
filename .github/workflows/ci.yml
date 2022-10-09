@@ -55,6 +55,8 @@ jobs:
           python env_json_to_dotenv.py SECRETS_CONTEXT
       - name: Stop old container
         run: docker stop nycmesh-support-bot || true
+      - name: Remove old container 
+        run: docker rm nycmesh-support-bot || true
       - name: Run app
         run: docker run -d --name nycmesh-support-bot -v "$PWD/.env:/app/.env" andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
       # deploy tests?
