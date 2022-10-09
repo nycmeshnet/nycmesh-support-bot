@@ -38,9 +38,7 @@ echo "Mesh IP: $meship";
 # ping and traceroute to host, set reachable flag
 
 echo
-echo $separator
-echo "                           Ping/Trace"
-echo $separator
+echo "=====Ping/Trace====="
 echo
 
 ping -c 1 $meship > /dev/null;
@@ -72,9 +70,7 @@ echo "$interfaces";
 # speed test from host to sn3
 
 echo
-echo $separator
-echo "                        Omni Speed Test"
-echo $separator
+echo ====="Omni Speed Test"=====
 echo
 speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.69.7.13);
 echo "$speedtest" | grep done -A 8
