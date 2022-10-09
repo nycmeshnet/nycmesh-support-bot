@@ -6,50 +6,7 @@ set -a
 source <(cat .env | sed -E 's/(\s+=\s*)|(\s*=\s+)/=/g' | sed -e '/^#/d;/^\s*$/d' -e "s/'/'\\\''/g" -e "s/=\(.*\)/='\1'/g")
 set +a
 
-separator="================================================================="
-
-cat <<EOF
-                  #########################
-              #################################
-           #######################################
-        ##############################################
-      ####################        ######################
-    #####################          ######################
-   #######################        ########################
-  ##############################     ######################
- #####################    ########    ######################
- ###################     ###########    ####################
- #################     ##############     ##################
- ###############     ###################    ################
- #############     #########################################
- #########       ############################      #########
- #######          ##########################         #######
-  ######         ####                                #######
-   #######    ###############################      ########
-    ######################################################
-      ##################################################
-        ##############################################
-           #######################################
-              #################################
-                  #########################
-
-           _   ___   ______   __  __ _____ ____  _   _
-          | \ | \ \ / / ___| |  \/  | ____/ ___|| | | |
-          |  \| |\ V / |     | |\/| |  _| \___ \| |_| |
-          | |\  | | || |___  | |  | | |___ ___) |  _  |
-          |_| \_| |_| \____| |_|  |_|_____|____/|_| |_|
- _   _  ___  ____  _____      ____  _____ ____   ___  ____ _____
-| \ | |/ _ \|  _ \| ____|    |  _ \| ____|  _ \ / _ \|  _ \_   _|
-|  \| | | | | | | |  _|      | |_) |  _| | |_) | | | | |_) || |
-| |\  | |_| | |_| | |___     |  _ <| |___|  __/| |_| |  _ < | |
-|_| \_|\___/|____/|_____|    |_| \_\_____|_|    \___/|_| \_\|_|
-
-EOF
-
-
-echo $separator
-echo "                             Node Stats"
-echo $separator
+echo "=====Node Stats====="
 echo
 
 
@@ -60,11 +17,11 @@ echo "Network Number: $1";
 
 if (( $1 )) 2>/dev/null; then
   if (( $1 > 8000 )) ; then
-    echo network numbers are below 8000
+    echo "FATAL: Network numbers are below 8000."
     exit
   fi
 else
-  echo not a number
+  echo "FATAL: Input is not a number."
   exit
 fi
 
@@ -81,9 +38,7 @@ echo "Mesh IP: $meship";
 # ping and traceroute to host, set reachable flag
 
 echo
-echo $separator
-echo "                           Ping/Trace"
-echo $separator
+echo "=====Ping/Trace====="
 echo
 
 ping -c 1 $meship > /dev/null;
@@ -104,11 +59,8 @@ if (( $reachable == 0 )); then
 else
 
 echo
-echo $separator
-echo "                       Omni Interfaces"
-echo $separator
+echo "=====Omni Interfaces====="
 echo
-
 
 # print interfaces on host
 
@@ -118,9 +70,7 @@ echo "$interfaces";
 # speed test from host to sn3
 
 echo
-echo $separator
-echo "                        Omni Speed Test"
-echo $separator
+echo ====="Omni Speed Test"=====
 echo
 speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.69.7.13);
 echo "$speedtest" | grep done -A 8
@@ -130,9 +80,7 @@ fi
 # get device info from searching nn in uisp
 
 echo
-echo $separator
-echo "                         UISP Stats"
-echo $separator
+echo "=====UISP Stats====="
 echo
 
 uispgrab=$(/app/bin/nycmesh-tool uisp devices getDevices --x-auth-token "$NYCMESH_TOOL_AUTH_TOKEN" 2>/dev/null | jq '.[]');
