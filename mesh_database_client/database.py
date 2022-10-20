@@ -77,9 +77,8 @@ class DatabaseClient:
         df = self.get_range_as_df('Form Responses 1!A:AO')
  
         # force columns to be specific type
-        df['NN'] = (pd.to_numeric(df['NN'], errors="coerce")
-                         .fillna(0)
-                         .astype(int))
+        df['NN'] = (pd.to_numeric(df['NN'], errors="coerce").fillna(0).astype(int))
+        df['ID'] = (pd.to_numeric(df['ID'], errors="coerce").fillna(0).astype(int))
 
         df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
         df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
@@ -166,6 +165,24 @@ class DatabaseClient:
         connected_nodes = from_nns + to_nns
 
         return connected_nodes
+
+    def validate_nn(self, nn):
+        nn = int(nn)
+
+        id_rows = self.signup_df[self.signup_df['ID'] == nn]
+        for index, row in id_rows.iterrows():
+            if row['Status'] == 'NN assigned':
+                return nn
+            elif row['Status'] == 'Installed':
+                return row['NN']
+        
+        nn_rows = self.signup_df[self.signup_df['NN'] == nn]
+        for index, row in nn_rows.iterrows():
+            if row['Status'] == 'Installed':
+                return nn
+
+        return None
+
 
 if __name__ == '__main__':
     database_client = DatabaseClient()
