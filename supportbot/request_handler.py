@@ -3,8 +3,8 @@ from supportbot.utils.diagnostics_report import upload_report_file, get_report
 from supportbot.utils.user_data import MeshUser
 import subprocess
 
-def handle_support_request(app, config, user_id, channel_id, message_ts):
-    user = MeshUser(app, user_id, config['nn_property_id'])
+def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None):
+    user = MeshUser(app, user_id, config['nn_property_id'], manual_number=manual_number)
 
     app.client.chat_postMessage(
         channel=channel_id,
@@ -16,7 +16,6 @@ def handle_support_request(app, config, user_id, channel_id, message_ts):
     )
 
     if user.network_number:
-
         app.client.chat_postMessage(
             channel=channel_id,
             thread_ts=message_ts,
