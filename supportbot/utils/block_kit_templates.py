@@ -43,6 +43,21 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id):
                         "text": "The bot will respond in-thread with the diagnostic information"
                     }
                 ]
+            },
+            {
+            "type": "input",
+            'optional': True,
+            "block_id": "numberInputBlock",
+            "element": {
+                "type": "number_input",
+                "is_decimal_allowed": False,
+                "action_id": "manual_number-action"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Manual NN or Install Number Input:",
+                "emoji": True
+            }
             }
         ]
     }

@@ -51,7 +51,14 @@ def run_app(config):
     def modal_submit(ack, body, client, view, logger):
         ack()
         metadata = json.loads(view['private_metadata'])
-        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'])
+        
+        manual_number_input = view['state']['values']['numberInputBlock']['manual_number-action']
+        if 'value' in manual_number_input:
+            manual_number = manual_number_input['value']
+        else:
+            manual_number = None
+
+        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
 
     SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()
