@@ -25,7 +25,7 @@ jobs:
           docker build -t nycmesh-support-bot-test .
           docker run -v "$PWD/.env:/app/.env" --rm nycmesh-support-bot-test pytest
   Build:
-    runs-on: [ubuntu-latest]
+    runs-on: [self-hosted, daniel-server]
     needs: Test
     if: github.ref == 'refs/heads/main'
     steps:

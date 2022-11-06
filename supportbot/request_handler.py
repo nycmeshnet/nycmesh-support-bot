@@ -16,12 +16,6 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
     )
 
     if user.network_number:
-        app.client.chat_postMessage(
-            channel=channel_id,
-            thread_ts=message_ts,
-            text=f"Diagnostics running...",
-        )
-
         report = get_report(user.network_number)
 
         upload_report_file(app, report, channel_id, message_ts, user.network_number)
