@@ -80,8 +80,8 @@ class DatabaseClient:
         df['NN'] = (pd.to_numeric(df['NN'], errors="coerce").fillna(0).astype(int))
         df['ID'] = (pd.to_numeric(df['ID'], errors="coerce").fillna(0).astype(int))
 
-        df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
-        df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
+        # df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
+        # df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
 
         df.drop(df.tail(1).index,inplace=True)
          
@@ -124,33 +124,33 @@ class DatabaseClient:
             return None
         return nn
 
-    def address_to_nn(self, address):
-        signup_df = self.signup_df
+    # def address_to_nn(self, address):
+    #     signup_df = self.signup_df
 
-        geocode_result = self.gmaps.geocode(address)
-        location = geocode_result[0]['geometry']['location']
-        lat = location['lat']
-        lng = location['lng']
+    #     geocode_result = self.gmaps.geocode(address)
+    #     location = geocode_result[0]['geometry']['location']
+    #     lat = location['lat']
+    #     lng = location['lng']
 
-        deg_to_feet = 288200
+    #     deg_to_feet = 288200
 
-        lat_diff = abs(signup_df['Latitude']-lat)*deg_to_feet
-        lng_diff = abs(signup_df['Longitude']-lng)*deg_to_feet
-        distance = sqrt(lat_diff**2 + lng_diff**2)
-        signup_df['distance'] = distance
-        min_distance = distance.min()
+    #     lat_diff = abs(signup_df['Latitude']-lat)*deg_to_feet
+    #     lng_diff = abs(signup_df['Longitude']-lng)*deg_to_feet
+    #     distance = sqrt(lat_diff**2 + lng_diff**2)
+    #     signup_df['distance'] = distance
+    #     min_distance = distance.min()
 
-        # check if closest signup request is further than 200ft
-        if min_distance > 200:
-            return None
+    #     # check if closest signup request is further than 200ft
+    #     if min_distance > 200:
+    #         return None
 
-        min_index = distance.idxmin()
-        closest = signup_df.iloc[min_index]
+    #     min_index = distance.idxmin()
+    #     closest = signup_df.iloc[min_index]
 
-        if closest['NN'] == 0:
-            return None
+    #     if closest['NN'] == 0:
+    #         return None
 
-        return closest['NN']
+    #     return closest['NN']
 
 
     def nn_to_linked_nn(self, nn):

@@ -73,4 +73,5 @@ def test_validate_nn_abandoned():
     assert nn is None
 
 if __name__ == '__main__':
-    test_address_to_nn()
+    # test_address_to_nn()
+    pass
