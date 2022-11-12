@@ -84,7 +84,7 @@ echo "=====UISP Stats====="
 echo
 
 uispgrab=$(/app/bin/nycmesh-tool uisp devices getDevices --x-auth-token "$NYCMESH_TOOL_AUTH_TOKEN" 2>/dev/null | jq '.[]');
-devices=$(echo $uispgrab | jq 'select(.identification.name | match("\\D'$nn'\\D"))');
+devices=$(echo $uispgrab | jq 'select(.identification.name | match("'$nn'"))');
 
 #echo "$devices";
 
