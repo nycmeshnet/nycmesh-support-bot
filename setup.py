@@ -15,4 +15,3 @@ setup(
             'console_scripts': ['supportbot-server=supportbot.cli.bot_server:main'],
       }
 )
-

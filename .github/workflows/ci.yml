@@ -7,9 +7,6 @@ jobs:
       SECRETS_CONTEXT: ${{ toJson(secrets) }}
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo $USER
-      - run: pwd
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by ${{runner.hostname}}!"
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The repository has been cloned to the runner."
@@ -17,9 +14,7 @@ jobs:
         with:
           python-version: '3.9' 
       - name: Generate .env from GitHub secrets
-        run: |
-          echo $SECRETS_CONTEXT
-          python env_json_to_dotenv.py SECRETS_CONTEXT
+        run: python env_json_to_dotenv.py SECRETS_CONTEXT
       - name: Build and run tests 🧪
         run: |
           docker build -t nycmesh-support-bot-test .
@@ -50,9 +45,7 @@ jobs:
         with:
           python-version: '3.9'
       - name: Generate .env from GitHub secrets
-        run: |
-          echo $SECRETS_CONTEXT
-          python env_json_to_dotenv.py SECRETS_CONTEXT
+        run: python env_json_to_dotenv.py SECRETS_CONTEXT
       - name: Stop old container and run
         run: | 
           docker stop nycmesh-support-bot || true
