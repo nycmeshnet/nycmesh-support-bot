@@ -58,6 +58,40 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id):
                 "text": "Manual NN or Install Number Input:",
                 "emoji": True
             }
+            },
+            {
+                "type": "input",
+                'optional': True,
+                "block_id": "checkboxInputBlock",
+                "element": {
+                    "type": "checkboxes",
+                    "action_id": "at_message_toggle-action",
+                    "initial_options": [
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Yes, @ member",
+                                "emoji": True
+                            },
+                            "value": "at_message_checkbox"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Yes, @ member",
+                                "emoji": True
+                            },
+                            "value": "at_message_checkbox"
+                        }
+                    ]
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "@ member from original message?",
+                    "emoji": True
+                }
             }
         ]
     }
