@@ -2,6 +2,8 @@ from webbrowser import get
 from supportbot.utils.diagnostics_report import upload_report_file, get_report
 from supportbot.utils.user_data import MeshUser
 import subprocess
+from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_message_block_kit
+from slack_bolt import App
 
 def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None, at_member = True):
     user = MeshUser(app, user_id, config['nn_property_id'], manual_number=manual_number)

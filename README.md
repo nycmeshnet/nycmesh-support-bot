@@ -84,6 +84,10 @@ Starting bolt app...
 Bolt app is running!
 ```
 
+## Autoreload
+- install [entr](https://github.com/eradman/entr)
+- `find . -name \*.py -print | entr -r supportbot-server`
+
 ### CLI Arguments
 
 The `supportbot-server` command is configurable via a few CLI arguments. Use 

@@ -7,6 +7,8 @@ from supportbot.request_handler import handle_support_request
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
 from supportbot.utils.message_classification import is_in_support_channel, user_needs_help
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_dialog_block_kit, help_suggestion_message_block_kit
+
 
 import os
 from dotenv import load_dotenv
@@ -25,8 +27,15 @@ def run_app(config):
             user_needs_help
         ]
     )
-    def respond_to_help_requests(message):
-        handle_support_request(app, config, message['user'], message['channel'], message['ts'])
+    def respond_to_help_suggestion(message):
+        # app.client.chat_postEphemeral not working
+        app.client.chat_postMessage(
+            channel=message['channel'],
+            thread_ts=message['ts'],
+            blocks=help_suggestion_message_block_kit["blocks"],
+            user=message['user'],
+            text="New support request detected, offering to run supportbot on supported platforms",
+        )
 
     @app.event("message")
     def handle_message_events():
@@ -48,11 +57,11 @@ def run_app(config):
         print(resp)
 
     @app.view("manually_run_diagnostics")
-    def modal_submit(ack, body, client, view, logger):
+    def submit_manually_run_diagnostics(ack, body, client, view, logger):
         ack()
         metadata = json.loads(view['private_metadata'])
         
-        manual_number_input = view['state']['values']['numberInputBlock']['manual_number-action']
+        manual_number_input = view['state']['values']['numberInputBlock']['manual_number_input']
         if 'value' in manual_number_input:
             manual_number = manual_number_input['value']
         else:
@@ -66,5 +75,27 @@ def run_app(config):
 
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number, at_member=at_member)
 
+    @app.action("run_suggestion_button")
+    def submit_run_request(ack, body, logger):
+        ack()
+        resp = app.client.views_open(
+            trigger_id=body["trigger_id"],
+            view=help_suggestion_dialog_block_kit(
+                body['channel']['id'],
+                body['message']['ts'],
+                body['user']['id']
+            )
+        )
+
+    @app.view("run_suggestion_submit")
+    def submit_run_request(ack, body, client, view, logger):
+        ack()
+        metadata = json.loads(view['private_metadata'])
+        manual_number_input = view['state']['values']['numberInputBlock']['manual_number_input']
+        if 'value' in manual_number_input:
+            manual_number = manual_number_input['value']
+        else:
+            manual_number = None
+        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number, at_member = False)
 
     SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()
