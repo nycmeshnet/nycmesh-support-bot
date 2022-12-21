@@ -3,7 +3,7 @@ from functools import partial
 
 from slack_bolt import App
 
-from supportbot.request_handler import handle_support_request
+from supportbot.request_handler import handle_support_request, post_confirmation_box_message
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
 from supportbot.utils.message_classification import is_in_support_channel, user_needs_help
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -26,7 +26,9 @@ def run_app(config):
         ]
     )
     def respond_to_help_requests(message):
-        handle_support_request(app, config, message['user'], message['channel'], message['ts'])
+        # handle_support_request(app, config, message['user'], message['channel'], message['ts'])
+        post_confirmation_box_message(app, config, message['user'], message['channel'], message['ts'])
+
 
     @app.event("message")
     def handle_message_events():

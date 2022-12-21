@@ -2,6 +2,7 @@ from webbrowser import get
 from supportbot.utils.diagnostics_report import upload_report_file, get_report
 from supportbot.utils.user_data import MeshUser
 import subprocess
+from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, message_template
 
 def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None, at_member = True):
     user = MeshUser(app, user_id, config['nn_property_id'], manual_number=manual_number)
@@ -21,3 +22,11 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
         report = get_report(user.network_number)
 
         upload_report_file(app, report, channel_id, message_ts, user.network_number)
+
+def post_confirmation_box_message(app, config, user_id, channel_id, message_ts):
+
+    app.client.chat_postMessage(
+        channel=channel_id,
+        thread_ts=message_ts,
+        blocks=message_template["blocks"]
+    )
