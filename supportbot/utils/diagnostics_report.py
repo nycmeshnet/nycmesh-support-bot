@@ -3,7 +3,7 @@ import subprocess
 
 def upload_report_file(app, report_txt, channel_id, thread_id, network_number):
     timestamp = datetime.datetime.now()
-    response = app.client.files_upload(
+    response = app.client.files_upload_v2(
         channels=channel_id,
         content=report_txt,
         filetype='txt',
