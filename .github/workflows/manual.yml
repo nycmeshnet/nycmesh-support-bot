@@ -1,20 +1,7 @@
-# This is a basic workflow that is manually triggered
-
 name: Manual staging deploy
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch
-    # # Inputs the workflow accepts.
-    # inputs:
-    #   name:
-    #     # Friendly description to be shown in the UI instead of 'name'
-    #     description: 'Person to greet'
-    #     # Default value if no value is explicitly provided
-    #     default: 'World'
-    #     # Input has to be provided for the workflow to run
-    #     required: true
 
 jobs:
   Run:
@@ -28,4 +15,4 @@ jobs:
         run: |
           docker stop nycmesh-support-bot-test || true
           docker build -t nycmesh-support-bot-test .
-          docker run -d --name nycmesh-support-bot-test -v "~/.env:/app/.env" --rm nycmesh-support-bot-test
+          docker run -d --name nycmesh-support-bot-test -v "/home/ubuntu/.env:/app/.env" --rm nycmesh-support-bot-test
