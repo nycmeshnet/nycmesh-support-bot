@@ -28,4 +28,4 @@ jobs:
         run: |
           docker stop nycmesh-support-bot-test || true
           docker build -t nycmesh-support-bot-test .
-          docker run -d --name nycmesh-support-bot-test -v "~/.env:/app/.env" --restart unless-stopped --rm nycmesh-support-bot-test
+          docker run -d --name nycmesh-support-bot-test -v "~/.env:/app/.env" --rm nycmesh-support-bot-test
