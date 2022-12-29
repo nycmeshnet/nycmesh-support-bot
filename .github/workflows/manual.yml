@@ -17,7 +17,7 @@ on:
     #     required: true
 
 jobs:
-  Test:
+  Run:
     runs-on: [self-hosted, andy-server]
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
