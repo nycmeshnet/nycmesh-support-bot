@@ -85,7 +85,7 @@ def run_app(config):
             trigger_id=body["trigger_id"],
             view=help_suggestion_dialog_block_kit(
                 body['channel']['id'],
-                body['message']['ts'],
+                body['message']['thread_ts'],
                 body['user']['id']
             )
         )
