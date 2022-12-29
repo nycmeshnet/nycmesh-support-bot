@@ -5,7 +5,7 @@ from slack_bolt import App
 
 from supportbot.request_handler import handle_support_request
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
-from supportbot.utils.message_classification import is_in_support_channel, is_first_message
+from supportbot.utils.message_classification import is_in_support_channel, is_first_message_in_thread
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_dialog_block_kit, help_suggestion_message_block_kit
 
@@ -24,7 +24,7 @@ def run_app(config):
         event={"type": "message", "subtype": None},
         matchers=[
             partial(is_in_support_channel, support_channel_ids=config['channel_ids']),
-            is_first_message
+            is_first_message_in_thread
         ]
     )
     def respond_to_help_suggestion(message):
