@@ -29,9 +29,6 @@ def run_app(config):
     )
     def respond_to_help_suggestion(message):
         # app.client.chat_postEphemeral not working
-        print(f"thread ts: {message['ts']}")
-        print(f"message['channel']: {message['channel']}")
-        print(f"message['user']: {message['user']}")
         app.client.chat_postMessage(
             channel=message['channel'],
             thread_ts=message['ts'],
