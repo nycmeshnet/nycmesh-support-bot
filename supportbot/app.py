@@ -48,7 +48,7 @@ def run_app(config):
 
         user_id = shortcut['message']['user']
         user = MeshUser(app, user_id, config['nn_property_id'])
-        nn = user.user.network_number
+        nn = user.network_number
 
         resp = client.views_open(
             trigger_id=shortcut["trigger_id"],
@@ -83,12 +83,18 @@ def run_app(config):
     @app.action("run_suggestion_button")
     def submit_run_request(ack, body, logger):
         ack()
+
+        user_id = body['user']['id']
+        user = MeshUser(app, user_id, config['nn_property_id'])
+        nn = user.network_number
+
         resp = app.client.views_open(
             trigger_id=body["trigger_id"],
             view=help_suggestion_dialog_block_kit(
                 body['channel']['id'],
                 body['message']['thread_ts'],
-                body['user']['id']
+                body['user']['id'],
+                nn = nn
             )
         )
 

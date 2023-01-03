@@ -1,11 +1,20 @@
 import json
 
-def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
-    if nn is not None:  
-        default_nn_manual_input = nn
-    else:
-        default_nn_manual_input = "nn"
+def get_default_nn_element_field(possible_nn):
+    element = {
+        "type": "number_input",
+        "is_decimal_allowed": False,
+        "action_id": "manual_number_input"
+    }
 
+    if possible_nn is None:
+        return element
+    else:
+        element |= {'initial_value': str(possible_nn)}
+        return element
+    
+
+def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
 
     return {
         "type": "modal",
@@ -53,15 +62,10 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
             "type": "input",
             'optional': True,
             "block_id": "numberInputBlock",
-            "element": {
-                "type": "number_input",
-                "is_decimal_allowed": False,
-                "action_id": "manual_number_input",
-                "initial_value": default_nn_manual_input
-            },
+            "element": get_default_nn_element_field(nn),
             "label": {
                 "type": "plain_text",
-                "text": "Manual NN or Install Number Input:",
+                "text": "NN or Install Number Input:",
                 "emoji": True
             }
             },
@@ -135,11 +139,6 @@ help_suggestion_message_block_kit = {
 
 def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
 
-    if nn is not None:
-        default_nn_manual_input = nn
-    else:
-        default_nn_manual_input = ""
-
     return {
         "type": "modal",
         "callback_id": "run_suggestion_submit",
@@ -168,12 +167,7 @@ def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
             "type": "input",
             'optional': True,
             "block_id": "numberInputBlock",
-            "element": {
-                "type": "number_input",
-                "is_decimal_allowed": False,
-                "action_id": "manual_number_input",
-                "initial_value": default_nn_manual_input
-            },
+            "element": get_default_nn_element_field(nn),
             "label": {
                 "type": "plain_text",
                 "text": "Node Number or Install Number:",
