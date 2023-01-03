@@ -6,9 +6,9 @@ from slack_bolt import App
 from supportbot.request_handler import handle_support_request
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit
 from supportbot.utils.message_classification import is_in_support_channel, is_first_message_in_thread
+from supportbot.utils.user_data import MeshUser
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_dialog_block_kit, help_suggestion_message_block_kit
-
 
 import os
 from dotenv import load_dotenv
@@ -46,12 +46,17 @@ def run_app(config):
     def open_modal(ack, shortcut, client):
         ack()
 
+        user_id = shortcut['message']['user']
+        user = MeshUser(app, user_id, config['nn_property_id'])
+        nn = user.user.network_number
+
         resp = client.views_open(
             trigger_id=shortcut["trigger_id"],
             view=confrimation_dialog_block_kit(
                 shortcut['channel']['id'],
                 shortcut['message_ts'],
-                shortcut['message']['user']
+                shortcut['message']['user'],
+                nn = nn
             )
         )
         print(resp)

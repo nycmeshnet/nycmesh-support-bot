@@ -1,6 +1,12 @@
 import json
 
-def confrimation_dialog_block_kit(channel_id, message_ts, user_id):
+def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
+    if nn is not None:  
+        default_nn_manual_input = nn
+    else:
+        default_nn_manual_input = "nn"
+
+
     return {
         "type": "modal",
         "callback_id": "manually_run_diagnostics",
@@ -50,7 +56,8 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id):
             "element": {
                 "type": "number_input",
                 "is_decimal_allowed": False,
-                "action_id": "manual_number_input"
+                "action_id": "manual_number_input",
+                "initial_value": default_nn_manual_input
             },
             "label": {
                 "type": "plain_text",
@@ -96,6 +103,7 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id):
     }
 
 help_suggestion_message_block_kit = {
+
 	"blocks": [
 		{
 			"type": "section",
@@ -125,7 +133,13 @@ help_suggestion_message_block_kit = {
 	]
 }
 
-def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id):
+def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
+
+    if nn is not None:
+        default_nn_manual_input = nn
+    else:
+        default_nn_manual_input = ""
+
     return {
         "type": "modal",
         "callback_id": "run_suggestion_submit",
@@ -157,7 +171,8 @@ def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id):
             "element": {
                 "type": "number_input",
                 "is_decimal_allowed": False,
-                "action_id": "manual_number_input"
+                "action_id": "manual_number_input",
+                "initial_value": default_nn_manual_input
             },
             "label": {
                 "type": "plain_text",
