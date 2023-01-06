@@ -1,0 +1,18 @@
+name: Manual live deploy
+
+on:
+  workflow_dispatch
+
+jobs:
+  Run:
+    runs-on: [self-hosted, daniel-server]
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The repository has been cloned to the runner."
+      - name: Build and run tests 🧪
+        run: |
+          docker stop nycmesh-support-bot || true
+          docker build -t nycmesh-support-bot .
+          docker run -d --name nycmesh-support-bot -v "/home/ubuntu/.env:/app/.env" --rm nycmesh-support-bot
