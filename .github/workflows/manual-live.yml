@@ -14,5 +14,6 @@ jobs:
       - name: Build and run tests 🧪
         run: |
           docker stop nycmesh-support-bot || true
+          docker rm nycmesh-support-bot || true
           docker build -t nycmesh-support-bot .
           docker run -d --name nycmesh-support-bot -v "/home/ubuntu/.env:/app/.env" --rm nycmesh-support-bot
