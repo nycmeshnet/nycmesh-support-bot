@@ -57,19 +57,19 @@ def test_nn_to_linked_nn_too_large():
 # validate NN
 
 def test_validate_nn_assigned():
-    nn = database_client.validate_nn(267)
+    nn = database_client.get_nn(267)
     assert nn == 267
 
 def test_validate_nn_installed_id():
-    nn = database_client.validate_nn(12172)
+    nn = database_client.get_nn(12172)
     assert nn == 168
 
 def test_validate_nn_installed_nn():
-    nn = database_client.validate_nn(214)
+    nn = database_client.get_nn(214)
     assert nn == 214
 
 def test_validate_nn_abandoned():
-    nn = database_client.validate_nn(6877)
+    nn = database_client.get_nn(6877)
     assert nn is None
 
 if __name__ == '__main__':

@@ -44,9 +44,7 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Are you sure you would like to run diagnostics for this message? This will "
-                            f"cause the support bot look up <@{user_id}>'s network number and connect to "
-                            "their node to provide diagnostic information. "
+                    "text": f"Are you sure you would like to run diagnostics for this message? This will cause the support bot to connect to <@{user_id}>'s node to provide diagnostic information. "
                 }
             },
             {
@@ -60,12 +58,12 @@ def confrimation_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
             },
             {
             "type": "input",
-            'optional': True,
+            'optional': False,
             "block_id": "numberInputBlock",
             "element": get_default_nn_element_field(nn),
             "label": {
                 "type": "plain_text",
-                "text": "NN or Install Number Input:",
+                "text": "NN or Install Number:",
                 "emoji": True
             }
             },
