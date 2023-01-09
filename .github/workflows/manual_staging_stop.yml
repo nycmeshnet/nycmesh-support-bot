@@ -7,9 +7,6 @@ jobs:
   Run:
     runs-on: [self-hosted, andy-server]
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "💡 The repository has been cloned to the runner."
       - name: Stop staging server
         run: |
           docker stop nycmesh-support-bot-test || true
