@@ -10,7 +10,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/supportbot/cli/bot_server.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "args":["--channel-ids","C03TK04U1AL","--channel-ids","C04GSUXKD7D"]
         }
     ]
 }

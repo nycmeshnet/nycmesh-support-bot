@@ -50,7 +50,7 @@ jobs:
         run: | 
           docker stop nycmesh-support-bot || true
           docker rm nycmesh-support-bot || true
-          docker run -d --name nycmesh-support-bot -v "$PWD/.env:/app/.env" --restart unless-stopped andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
+          docker run -d --name nycmesh-support-bot -v "$PWD/.env:/app/.env" --restart unless-stopped andybaumgar/nycmesh-support-bot:$GITHUB_SHA supportbot-server --channel-ids "C679UKBUK" --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
       - name: Print startup output
         run: |
           sleep 5

@@ -9,7 +9,8 @@ from supportbot.constants import DEFAULT_CHANNEL_IDS, DEFAULT_NETWORK_NUMBER_PRO
 @click.option(
     '--channel-ids',
     default=DEFAULT_CHANNEL_IDS,
-    help="The Slack ID number for the channel to run the bot in"
+    help="The Slack ID number for the channel to run the bot in",
+    multiple=True
 )
 @click.option(
     '--nn-property-id',
