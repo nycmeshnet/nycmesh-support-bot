@@ -1,0 +1,26 @@
+name: Manual live deploy
+
+on:
+  workflow_dispatch
+
+jobs:
+  Run:
+    runs-on: [self-hosted, daniel-server]
+    env: 
+      SECRETS_CONTEXT: ${{ toJson(secrets) }}
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The repository has been cloned to the runner."
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Generate .env from GitHub secrets
+        run: python env_json_to_dotenv.py SECRETS_CONTEXT
+      - name: Build and run tests 🧪
+        run: |
+          docker stop nycmesh-support-bot || true
+          docker rm nycmesh-support-bot || true
+          docker build -t nycmesh-support-bot .
+          docker run -d --name nycmesh-support-bot -v "$PWD/.env:/app/.env" --restart unless-stopped nycmesh-support-bot supportbot-server --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
