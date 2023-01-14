@@ -7,7 +7,7 @@ from slack_bolt import App
 
 def nn_to_map_url(nn):
     base = 'https://www.nycmesh.net/map/nodes/'
-    return f'<{base}-{nn}|{nn}>'
+    return f'<{base}/{nn}|{nn}>'
 
 def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None, at_member = True):
     user = MeshUser(app, user_id, config['nn_property_id'], manual_number=manual_number)
