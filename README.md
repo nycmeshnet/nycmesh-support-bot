@@ -84,7 +84,7 @@ Starting bolt app...
 Bolt app is running!
 ```
 
-## Autoreload
+## Autoreload (Linux and Mac)
 - install [entr](https://github.com/eradman/entr)
 - `find . -name \*.py -print | entr -r supportbot-server`
 

@@ -166,20 +166,20 @@ class DatabaseClient:
 
         return connected_nodes
 
-    def validate_nn(self, nn):
-        nn = int(nn)
+    def get_nn(self, input_number):
+        input_number = int(input_number)
 
-        id_rows = self.signup_df[self.signup_df['ID'] == nn]
+        id_rows = self.signup_df[self.signup_df['ID'] == input_number]
         for index, row in id_rows.iterrows():
             if row['Status'] == 'NN assigned':
-                return nn
+                return input_number
             elif row['Status'] == 'Installed':
                 return row['NN']
         
-        nn_rows = self.signup_df[self.signup_df['NN'] == nn]
+        nn_rows = self.signup_df[self.signup_df['NN'] == input_number]
         for index, row in nn_rows.iterrows():
             if row['Status'] == 'Installed':
-                return nn
+                return input_number
 
         return None
 
