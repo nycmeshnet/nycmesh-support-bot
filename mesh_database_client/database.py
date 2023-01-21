@@ -92,10 +92,8 @@ class DatabaseClient:
         df = self.get_range_as_df('Links!A:I')
 
         # force columns to be specific type
-        df = df.astype({'to':'float'})
-        df = df.astype({'from':'float'})
-        df = df.astype({'to':'int'})
-        df = df.astype({'from':'int'})
+        df['to'] = (pd.to_numeric(df['to'], errors="coerce").fillna(0).astype(int))
+        df['from'] = (pd.to_numeric(df['from'], errors="coerce").fillna(0).astype(int))
         
         return df
 
