@@ -19,6 +19,65 @@ The server connects to the Slack API via websockets, bypassing the need for a pu
 
 ## Getting Started
 
+### Installation
+
+To install the `supportbot-server` command, do the following:
+
+```shell
+git clone https://github.com/andybaumgar/nycmesh-support-bot.git
+cd nycmesh-support-bot/
+```
+
+A virtual environment is optional but recommended:
+```shell
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Finally, install this package with
+```shell
+pip install -e .
+```
+
+### Prerequisites
+You'll need `python` and `pip` to install this client. Confirm these are available with:
+```shell
+python3 --version
+python3 -m pip --version
+```
+
+If not, install them using the appropriate instructions for your OS [here](https://www.python.org/downloads/)
+
+
+### Credentials
+
+The bot needs Slack API credentials to operate. They are supplied in the .env file.
+
+You can obtain credentials for a Slack workspace by creating a socket-mode app following
+[these instructions](https://api.slack.com/apis/connections/socket).
+
+### Usage
+
+```shell
+> supportbot-server
+Starting bolt app...
+Bolt app is running!
+```
+
+- `find . -name \*.py -print | entr -r supportbot-server`
+
+### CLI Arguments
+
+The `supportbot-server` command is configurable via a few CLI arguments. Use 
+`supportbot-server --help` to learn more about the available options.
+
+## Autoreload (Linux and Mac)
+- install [entr](https://github.com/eradman/entr)
+
+## Deploy Process
+
+The supportbot uses GitHub Actions Docker and DockerHub for CI/CD. The [GitHub Actions workflow file](/.github/workflows/ci.yml) describes the process.
+
 ### Running with Docker
 
 - install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
@@ -40,67 +99,10 @@ docker build . -t supportbot
 docker run -v "$PWD/.env:/app/.env" --rm nycmesh-support-bot-test pytest
 ```
 
-### Prerequisites
-You'll need `python` and `pip` to install this client. Confirm these are available with:
-```shell
-python3 --version
-python3 -m pip --version
-```
-
-If not, install them using the appropriate instructions for your OS [here](https://www.python.org/downloads/)
-
-### Installation
-
-To install the `supportbot-server` command, do the following:
-
-```shell
-git clone https://github.com/andybaumgar/nycmesh-support-bot.git
-cd nycmesh-support-bot/
-```
-
-A virtual environment is optional but recommended:
-```shell
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Finally, install this package with
-```shell
-pip install -e .
-```
-
-### Credentials
-
-The bot needs Slack API credentials to operate. They are supplied in the .env file.
-
-You can obtain credentials for a Slack workspace by creating a socket-mode app following
-[these instructions](https://api.slack.com/apis/connections/socket).
-
-### Usage
-
-```shell
-> supportbot-server
-Starting bolt app...
-Bolt app is running!
-```
-
-## Autoreload (Linux and Mac)
-- install [entr](https://github.com/eradman/entr)
-- `find . -name \*.py -print | entr -r supportbot-server`
-
-### CLI Arguments
-
-The `supportbot-server` command is configurable via a few CLI arguments. Use 
-`supportbot-server --help` to learn more about the available options.
-
-## Deploy Process
-
-The supportbot uses GitHub Actions Docker and DockerHub for CI/CD. The [GitHub Actions workflow file](/.github/workflows/ci.yml) describes the process.
-
 ### Dockerhub
 Dockerhub is used as an image registry to store our built code before deployment.
 
-## Secrets
+### Secrets
 
 Secrets are stored in GitHub Secrets, and locally in a `.env` file. In production a [script](env_json_to_dotenv.py) is used to convert the GitHub Secrets to `.env`.
 
@@ -114,8 +116,6 @@ An extra command is used to setup the runner as a service:
 cd /home/supportbot/actions-runner
 sudo ./svc.sh start
 ```
-
-
 
 ## Built With
 

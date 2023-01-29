@@ -29,6 +29,10 @@ ENV PATH="${PATH}:/app/bin"
 
 ENV PYTHONUNBUFFERED=True
 
+WORKDIR /app/supportbot
+RUN pip3 install -e .
+
+WORKDIR /app/mesh-database-client
 RUN pip3 install -e .
 
 CMD supportbot-server
