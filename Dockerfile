@@ -35,4 +35,6 @@ RUN pip3 install -e .
 WORKDIR /app/mesh-database-client
 RUN pip3 install -e .
 
+WORKDIR /app
+
 CMD supportbot-server
