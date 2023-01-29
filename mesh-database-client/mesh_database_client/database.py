@@ -74,14 +74,14 @@ class DatabaseClient:
         return df
 
     def get_signup_df(self):
-        df = self.get_range_as_df('Form Responses 1!A:AO')
+        df = self.get_range_as_df('Form Responses 1!A:AP')
  
         # force columns to be specific type
         df['NN'] = (pd.to_numeric(df['NN'], errors="coerce").fillna(0).astype(int))
         df['ID'] = (pd.to_numeric(df['ID'], errors="coerce").fillna(0).astype(int))
 
-        # df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
-        # df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
+        df['Latitude'] = pd.to_numeric(df['Latitude'], errors='coerce')
+        df['Longitude'] = pd.to_numeric(df['Longitude'], errors='coerce')
 
         df.drop(df.tail(1).index,inplace=True)
          
@@ -165,6 +165,10 @@ class DatabaseClient:
         return connected_nodes
 
     def get_nn(self, input_number):
+
+        if input_number is None:
+            return None
+
         input_number = int(input_number)
 
         id_rows = self.signup_df[self.signup_df['ID'] == input_number]
@@ -180,6 +184,10 @@ class DatabaseClient:
                 return input_number
 
         return None
+
+    def nn_to_location(self, nn):
+        row = self.signup_df[self.signup_df['NN'] == nn].iloc[0]
+        return {'Latitude': row.Latitude, 'Longitude': row.Longitude}
 
 
 if __name__ == '__main__':

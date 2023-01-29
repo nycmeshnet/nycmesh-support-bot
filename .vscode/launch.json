@@ -8,7 +8,7 @@
             "name": "Supportbot",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/supportbot/cli/bot_server.py",
+            "program": "${workspaceFolder}/supportbot/supportbot/cli/bot_server.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args":["--channel-ids","C03TK04U1AL","--channel-ids","C04GSUXKD7D"]
