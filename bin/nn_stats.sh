@@ -72,8 +72,9 @@ echo "$interfaces";
 
 echo
 echo ====="Omni Speed Test"=====
+echo Speedtest from $meship to 10.10.10.100
 echo
-speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.69.7.13);
+speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.10.10.100);
 echo "$speedtest" | grep done -A 8
 
 fi
