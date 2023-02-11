@@ -122,6 +122,7 @@ sudo ./svc.sh start
 * [Python](https://python.org)
 * [Click](https://click.palletsprojects.com/)
 * [Slack Bolt for Python](https://slack.dev/bolt-python/concepts)
+* [nycmesh-tool CLI](https://github.com/byxorna/nycmesh-tool)
 
 ## Contributing
 
