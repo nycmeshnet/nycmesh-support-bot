@@ -12,11 +12,11 @@ import googlemaps
 from dotenv import load_dotenv
 from numpy import sqrt
 
-load_dotenv()
-
 class DatabaseClient:
 
     def __init__(self, spreadsheet_id = None):
+
+        load_dotenv()
 
         self.spreadsheet_id = spreadsheet_id
         if self.spreadsheet_id is None:
@@ -36,7 +36,7 @@ class DatabaseClient:
         self.signup_df = self.get_signup_df()
         self.links_df = self.get_links_df()
 
-        self.gmaps = googlemaps.Client(key=os.environ.get("MAPS_API"))
+        # self.gmaps = googlemaps.Client(key=os.environ.get("MAPS_API"))
 
     def _get_sheets_credentials_from_env(self):
         try:
@@ -192,5 +192,3 @@ class DatabaseClient:
 
 if __name__ == '__main__':
     database_client = DatabaseClient()
-    name = database_client.name_to_nn("test")
-    print(name)
