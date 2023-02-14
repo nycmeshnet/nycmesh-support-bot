@@ -84,6 +84,7 @@ The supportbot uses GitHub Actions Docker and DockerHub for CI/CD. The [GitHub A
 - start Docker Desktop
 - clone the repo and open a shell in the root folder
 - ensure you have a .env file with all required credentials
+- if you are running on Windows change the bin/nn_stats.sh carriage return back to LF (cloning on Windows will set it to CRLF, but this will not work in the Linux container)
 - run the following commands:
 ```shell
 docker build . -t supportbot
@@ -122,6 +123,7 @@ sudo ./svc.sh start
 * [Python](https://python.org)
 * [Click](https://click.palletsprojects.com/)
 * [Slack Bolt for Python](https://slack.dev/bolt-python/concepts)
+* [nycmesh-tool CLI](https://github.com/byxorna/nycmesh-tool)
 
 ## Contributing
 

@@ -47,7 +47,8 @@ if (( $? == 0 )); then
   latency=$(ping -c 4 $meship | tail -1 | awk '{print $4}' | cut -d '/' -f 2);
   echo Router is reachable with a latency of $latency milliseconds.
   echo
-  traceroute $meship;
+  echo Traceroute from $meship to 10.10.10.100
+  sshpass -p $OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship tool traceroute 10.10.10.100 count=1 use-dns=yes
   reachable=1
 else
   echo Router is unreachable. Some tests cannot be performed.
@@ -71,8 +72,9 @@ echo "$interfaces";
 
 echo
 echo ====="Omni Speed Test"=====
+echo Speedtest from $meship to 10.10.10.100
 echo
-speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.69.7.13);
+speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.10.10.100);
 echo "$speedtest" | grep done -A 8
 
 fi
