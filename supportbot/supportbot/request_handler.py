@@ -26,4 +26,4 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
     if user.network_number:
         report_text = get_report(user.network_number)
 
-        upload_report_file(app, report_text, channel_id, message_ts, user.network_number)
+        upload_report_file(app, report_text, channel_id, message_ts, user.network_number, "Here's a diagnostics report to help our volunteers:")
