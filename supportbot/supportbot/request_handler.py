@@ -4,7 +4,6 @@ from supportbot.utils.user_data import MeshUser
 import subprocess
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_message_block_kit
 from slack_bolt import App
-from os import linesep
 
 def nn_to_map_url(nn):
     base = 'https://www.nycmesh.net/map/nodes/'

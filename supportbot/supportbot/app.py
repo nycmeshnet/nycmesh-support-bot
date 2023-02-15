@@ -21,8 +21,6 @@ def run_app(config):
 
     app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-    print("bolt app loaded")
-
     @app.shortcut("run_node_diagnostics")
     def open_modal(ack, shortcut, client):
         ack()
@@ -72,7 +70,6 @@ def run_app(config):
         ]
     )
     def respond_with_help_suggestion(message):
-        print("respond_with_help_suggestion")
         app.client.chat_postEphemeral(
             channel=message['channel'],
             blocks=help_suggestion_message_block_kit(message['channel'], message['ts'], message['user'])['blocks'],
