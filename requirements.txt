@@ -8,3 +8,4 @@ pandas
 protobuf
 python-dotenv
 pytest
+pytz
