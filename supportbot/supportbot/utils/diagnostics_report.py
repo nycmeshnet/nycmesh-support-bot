@@ -1,8 +1,9 @@
 import datetime
+from pytz import timezone
 import subprocess
 
 def upload_report_file(app, report_txt, channel_id, thread_id, network_number, initial_comment):
-    timestamp = datetime.datetime.now()
+    timestamp = datetime.datetime.now(tz = timezone('US/Eastern'))
     response = app.client.files_upload(
         channels=channel_id,
         content=report_txt,
