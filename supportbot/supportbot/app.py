@@ -28,12 +28,13 @@ def run_app(config):
         user_id = shortcut['message']['user']
         user = MeshUser(app, user_id, config['nn_property_id'])
         nn = user.network_number
+        message = shortcut['message']
 
         resp = client.views_open(
             trigger_id=shortcut["trigger_id"],
             view=confrimation_dialog_block_kit(
                 shortcut['channel']['id'],
-                shortcut['message_ts'],
+                message['thread_ts'] if 'thread_ts' in message else message['ts'],
                 shortcut['message']['user'],
                 nn = nn
             )
@@ -70,9 +71,10 @@ def run_app(config):
         ]
     )
     def respond_with_help_suggestion(message):
+        root_message_ts = message['thread_ts'] if 'thread_ts' in message else message['ts']
         app.client.chat_postEphemeral(
             channel=message['channel'],
-            blocks=help_suggestion_message_block_kit(message['channel'], message['ts'], message['user'])['blocks'],
+            blocks=help_suggestion_message_block_kit(message['channel'], root_message_ts, message['user'])['blocks'],
             text="New support request detected, offering to run supportbot on supported platforms",
             user=message['user'],
             metadata="test"
