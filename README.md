@@ -148,7 +148,7 @@ Distributed under the MIT License. See the `LICENSE` file for more information.
  - Daniel Heredia - daniel@nycmesh.net
  - Marg Suarez - margsuarez@gmail.com
 
-Project Link: [https://github.com/andybaumgar/nycmesh-support-bot](https://github.com/andybaumgar/nycmesh-support-bot)
+Project Link: [https://github.com/nycmeshnet/nycmesh-support-bot](https://github.com/nycmeshnet/nycmesh-support-bot)
 
 ## Acknowledgments
 
