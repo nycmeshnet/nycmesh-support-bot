@@ -46,10 +46,11 @@ class MeshUser:
             if manual_nn is not None:
                 return manual_nn
 
-        slack_nn = self._profile.get('fields', {}).get(self._network_number_property_id, None)
+        slack_nn_raw = self._profile.get('fields', {}).get(self._network_number_property_id, None)
+        slack_nn = re.findall("(\d{3,})", slack_nn_raw['value'])
 
         # slack property nn / install number
-        if slack_nn and (validated_slack_nn := self._database_client.get_nn(int(slack_nn['value']))):
+        if slack_nn and (validated_slack_nn := self._database_client.get_nn(int(slack_nn[0]))):
             return validated_slack_nn
 
         # slack name nn / install number
