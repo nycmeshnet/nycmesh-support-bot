@@ -47,11 +47,12 @@ class MeshUser:
                 return manual_nn
 
         slack_nn_raw = self._profile.get('fields', {}).get(self._network_number_property_id, None)
-        slack_nn_matches = re.findall("(\d{3,})", slack_nn_raw['value'])
+        if slack_nn_raw:        
+            slack_nn_matches = re.findall("(\d{3,})", slack_nn_raw['value'])
 
-        # slack property nn / install number
-        if slack_nn_matches and (validated_slack_nn := self._database_client.get_nn(int(slack_nn_matches[0]))):
-            return validated_slack_nn
+            # slack property nn / install number
+            if slack_nn_matches and (validated_slack_nn := self._database_client.get_nn(int(slack_nn_matches[0]))):
+                return validated_slack_nn
 
         # slack name nn / install number
         slack_name_combined =  f"{self._profile['real_name']} {self._profile['display_name']}"
