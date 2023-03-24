@@ -1,0 +1,10 @@
+name: Nighty Restart
+on: schedules
+jobs:
+  Restart:
+    runs-on: [self-hosted, daniel-server]
+    steps:
+      run: |
+        docker stop nycmesh-support-bot || true
+        docker rm nycmesh-support-bot || true
+        docker run -d --name nycmesh-support-bot -v "$PWD/.env:/app/.env" --restart unless-stopped nycmesh-support-bot supportbot-server --channel-ids "C679UKBUK" --channel-ids "C045QM9TDMZ" --nn-property-id "XfBTK3QZ1S"
