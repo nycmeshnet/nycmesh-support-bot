@@ -8,12 +8,15 @@ import json
 load_dotenv()
 
 class MeshUser:
-    def __init__(self, app, user_id, network_number_property_id, manual_number=None):
+    def __init__(self, app, user_id, network_number_property_id, manual_number=None, database_client_cached=None):
         self._app = app
         self.user_id = user_id
         self._fetched = False
         self._network_number_property_id = network_number_property_id
-        self._database_client = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
+        if database_client_cached:
+            self._database_client = database_client_cached
+        else:
+            self._database_client = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
         self._manual_number = manual_number
 
     def _fetch_profile(self):

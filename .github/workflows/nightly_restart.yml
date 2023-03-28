@@ -1,0 +1,10 @@
+name: Nighty Restart
+on: 
+  schedule:
+  - cron: "0 3 * * *"
+jobs:
+  Restart:
+    runs-on: [self-hosted, daniel-server]
+    steps:
+      - name: Restart Supportbot
+        run: docker restart nycmesh-support-bot || true
