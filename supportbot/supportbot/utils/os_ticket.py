@@ -24,7 +24,7 @@ class OsTicketClient():
 
         return r
     
-    def get_parameters(self, ticket_id, status_id, message):
+    def get_parameters(self, ticket_id, status_id=None, message=''):
         parameters = {
             'ticket_id': ticket_id,
             'body':f'<p>{message}</p>',
@@ -38,7 +38,7 @@ class OsTicketClient():
     
     def close_ticket(self, ticket_id, message):
         close_status_id = 3
-        parameters = self.get_parameters(ticket_id, close_status_id, message)
+        parameters = self.get_parameters(ticket_id, status_id=close_status_id, message=message)
         data = {
             'query': 'ticket',
             'condition': 'close',
@@ -57,7 +57,7 @@ class OsTicketClient():
     
     def reopen_ticket(self, ticket_id, message):
         reopen_status_id = 1
-        parameters = self.get_parameters(ticket_id, 1, message)
+        parameters = self.get_parameters(ticket_id, status_id=reopen_status_id, message=message)
         data = {
             'query': 'ticket',
             'condition': 'close',
