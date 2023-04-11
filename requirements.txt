@@ -9,3 +9,4 @@ protobuf
 python-dotenv
 pytest
 pytz
+requests
