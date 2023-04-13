@@ -10,6 +10,7 @@ from supportbot.utils.message_classification import is_in_support_channel, is_fi
 from supportbot.utils.user_data import MeshUser
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, help_suggestion_dialog_block_kit, help_suggestion_message_block_kit
+from supportbot.utils.os_ticket import OsTicketClient, open_user_ticket
 
 import os
 from dotenv import load_dotenv
@@ -24,6 +25,7 @@ def run_app(config):
     app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
     database_client_cached = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
+    os_ticket_client = OsTicketClient(os.environ.get("OS_TICKET_API_KEY"))
 
     @app.shortcut("run_node_diagnostics")
     def open_modal(ack, shortcut, client):
@@ -130,6 +132,9 @@ def run_app(config):
             manual_number = manual_number_input['value']
         else:
             manual_number = None
+
+        open_user_ticket(os_ticket_client, metadata['user'], app)
+
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number, at_member = False)
 
 

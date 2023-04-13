@@ -24,7 +24,8 @@ def test_open_ticket():
     print(r.text) #new ticketID
 
 def test_close_ticket():
-    ticket_id = open_sample_ticket().text
+    # ticket_id = open_sample_ticket().text
+    ticket_id = 15152
     print(f'ticket_id: {ticket_id}')
 
     message = 'test close ticket'
@@ -37,16 +38,16 @@ def test_close_ticket():
 
 def test_reopen_ticket():
 
-    ticket_id = open_sample_ticket().text
+    # ticket_id = open_sample_ticket().text
+    ticket_id = 15152
     print(f'ticket_id: {ticket_id}')
     # os_ticket_client.close_ticket(ticket_id, 'test close ticket')
     
-    # message = 'test reopen ticket'
-    # r = os_ticket_client.reopen_ticket(ticket_id, message)
+    message = 'test reopen ticket'
+    r = os_ticket_client.reopen_ticket(ticket_id, message)
 
-    # print response
-    # print(r) #response code
-    # print(r.text) #new ticketID
+    print(r) #response code
+    print(r.text) #new ticketID
 
 if __name__ == '__main__':
-    test_open_ticket()
+    test_reopen_ticket()

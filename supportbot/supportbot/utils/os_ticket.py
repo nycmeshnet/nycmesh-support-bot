@@ -1,9 +1,11 @@
 import json
 import requests
+from supportbot.utils.user_data import MeshUser
 
 class OsTicketClient():
     def __init__(self, api_key):
-        self.api_header = {'X-API-Key':api_key}
+        self.api_header_open = {'X-API-Key':api_key}
+        self.api_header_close_reopen = {'apikey':api_key}
 
     def open_ticket(self, name, email, subject, message):
 
@@ -11,7 +13,7 @@ class OsTicketClient():
             'ip': '99.99.99.99', #value required for osTicket IP authentication
             'name': name, 
             'email': email, 
-            'subject': 'NYC Mesh API Test: ' + subject,
+            'subject': 'Support channel request: ' + subject,
             'message': message
             }
         data_json = json.dumps(data)
@@ -19,7 +21,7 @@ class OsTicketClient():
         r = requests.post(
             'https://devsupport.nycmesh.net/api/http.php/tickets.json', 
             data=data_json, 
-            headers=self.api_header
+            headers=self.api_header_open
             )
 
         return r
@@ -35,6 +37,7 @@ class OsTicketClient():
             'topic_id':1,
             'username':'Test User1'
             }
+        return parameters
     
     def close_ticket(self, ticket_id, message):
         close_status_id = 3
@@ -49,7 +52,7 @@ class OsTicketClient():
         r = requests.post(
             'https://devsupport.nycmesh.net/ost_wbs/?', 
             data=data_json, 
-            headers=self.api_header
+            headers=self.api_header_close_reopen
             )
 
         return r
@@ -69,7 +72,16 @@ class OsTicketClient():
         r = requests.post(
             'https://devsupport.nycmesh.net/ost_wbs/?', 
             data=data_json, 
-            headers=self.api_header
+            headers=self.api_header_close_reopen
             )
         
         return r
+    
+
+def open_user_ticket(os_ticket_client: OsTicketClient, user_id, app):
+    user = MeshUser(app, user_id, None)
+    message = f'Member requested support in #support channel.'
+    response = os_ticket_client.open_ticket(user.full_name, user.email, 'Message dialog input', 'Test Message')
+
+    return response
+

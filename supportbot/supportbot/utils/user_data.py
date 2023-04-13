@@ -13,11 +13,8 @@ class MeshUser:
         self.user_id = user_id
         self._fetched = False
         self._network_number_property_id = network_number_property_id
-        if database_client_cached:
-            self._database_client = database_client_cached
-        else:
-            self._database_client = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
         self._manual_number = manual_number
+        self.database_client_cached = database_client_cached
 
     def _fetch_profile(self):
         if self._fetched:
@@ -42,6 +39,11 @@ class MeshUser:
     @property
     def network_number(self):
         self._fetch_profile()
+
+        if self.database_client_cached:
+            self._database_client = self.database_client_cached
+        else:
+            self._database_client = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
 
         # user entered manual input
         if self._manual_number:
