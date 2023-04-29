@@ -3,6 +3,7 @@ import json
 from dotenv import load_dotenv
 import os
 import re
+from datetime import datetime
 
 load_dotenv()
 
@@ -28,9 +29,20 @@ def filter_devices_by_nn(devices, nn):
     for device in devices:
         try:
             name = device['identification']['displayName']
-            nn = nn_from_uisp_name(name)
-            if nn:
+            uisp_nn = nn_from_uisp_name(name)
+            if uisp_nn == nn:
                 filtered_devices.append(device)
         except:
             pass
     return filtered_devices
+
+def get_uisp_devices_by_nn(nn):
+    devices = filter_devices_by_nn(get_uisp_devices(), nn)
+    if len(devices) == 0:
+        return None
+    return devices
+
+def human_readable_uisp_time(uisp_time_string):
+    date_object = datetime.fromisoformat(uisp_time_string.replace("Z", "+00:00"))
+    human_time_string = date_object.strftime("%Y-%m-%d %H:%M:%S")
+    return human_time_string
