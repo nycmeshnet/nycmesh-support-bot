@@ -1,10 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM byxorna/nycmesh-tool:latest AS mesh-tool
-
 FROM python:3.9-slim-buster
-
-COPY --from=mesh-tool /nycmesh-tool /app/bin/nycmesh-tool
 
 WORKDIR /app
 
