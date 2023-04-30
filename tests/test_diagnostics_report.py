@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from supportbot.utils.diagnostics_report import get_report
+from supportbot.utils.diagnostics_report import get_report, lbe_traceroute_report
 
 load_dotenv()
 
@@ -17,6 +17,9 @@ def test_get_report_omni_install():
     report = get_report(344)
     print(report)
 
+def test_lbe_traceroute_report():
+    report = lbe_traceroute_report('10.96.182.236')
+    print(report)
 
 if __name__ == '__main__':
-    test_get_report_lbe_only()
+    test_lbe_traceroute_report()

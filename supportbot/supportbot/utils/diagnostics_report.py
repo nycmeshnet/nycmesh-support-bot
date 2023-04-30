@@ -2,6 +2,10 @@ import datetime
 from pytz import timezone
 import subprocess
 from supportbot.utils.uisp_data import get_uisp_devices_by_nn, human_readable_uisp_time
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def upload_report_file(app, report_txt, channel_id, thread_id, network_number, initial_comment):
     timestamp = datetime.datetime.now(tz = timezone('US/Eastern'))
@@ -25,7 +29,7 @@ def is_ubiquity(device):
     except:
         return False
 
-def lbe_only(devices):
+def is_lbe_only(devices):
     if len(devices) == 1 and is_lbe(devices[0]):
         return True
     return False
@@ -51,7 +55,7 @@ Location: {device['identification']['site']['name']}"""
 
 def generate_uisp_section(devices):
     uisp_outputs = [
-        '\n\n=====UISP Stats=====',
+        '\n=====UISP Stats=====',
         'Warning: UISP stats polled infrequently, may be out of date.',
         ]
     for device in devices:
@@ -65,8 +69,18 @@ def generate_uisp_section(devices):
     return '\n'.join(uisp_outputs)
 
 def ping_report(ip):
-    report = '=====Ping/Trace=====\n\n'
+    report = '=====Ping=====\n\n'
     command = ['ping', '-c', '1', ip]
+    report += subprocess.run(command, capture_output=True, text=True).stdout
+
+    return report
+
+def lbe_traceroute_report(ip):
+    report = '\n=====Traceroute=====\n\n'
+    lbe_password =os.environ.get("LBE_PASSWORD")
+    lbe_username = os.environ.get("LBE_USERNAME")
+    command = ['sshpass', '-p', lbe_password, 'ssh', '-o', 'StrictHostKeyChecking=no', f'{lbe_username}@{ip}', 'traceroute', '10.10.10.100']
+    print (' '.join(command))
     report += subprocess.run(command, capture_output=True, text=True).stdout
 
     return report
@@ -77,13 +91,14 @@ def get_report(nn):
 
     devices = get_uisp_devices_by_nn(nn)
 
-    if lbe_only(devices):
+    if is_lbe_only(devices):
         report += f'NN {nn} is an LBE only site, some details will be omitted.\n\n'
-        report += ping_report(cidr_to_ip(devices[0]['ipAddress']))
+        lbe_ip = cidr_to_ip(devices[0]['ipAddress'])
+        report += ping_report(lbe_ip)
+        report += lbe_traceroute_report(lbe_ip)
     else:
         command = ['nn_stats.sh', str(nn)]
-        # report += subprocess.run(command, capture_output=True, text=True).stdout
-        report += "test section"
+        report += subprocess.run(command, capture_output=True, text=True).stdout
 
     report += generate_uisp_section(devices)
     return report
