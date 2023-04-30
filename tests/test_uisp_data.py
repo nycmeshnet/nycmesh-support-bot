@@ -5,6 +5,7 @@ from supportbot.utils.uisp_data import nn_from_uisp_name, get_uisp_devices
 load_dotenv()
 
 # commented out so test doesn't fail off Mesh
+
 # def test_get_uisp_devices():
 #     assert len(get_uisp_devices()) > 0
 
