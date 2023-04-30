@@ -79,35 +79,4 @@ echo "$speedtest" | grep done -A 8
 
 fi
 
-# get device info from searching nn in uisp
-
-echo
-echo "=====UISP Stats====="
-echo
-
-uispgrab=$(/app/bin/nycmesh-tool uisp devices getDevices --x-auth-token "$NYCMESH_TOOL_AUTH_TOKEN" 2>/dev/null | jq '.[]');
-devices=$(echo $uispgrab | jq 'select(.identification.name | match("(\\D|\\A)'$nn'(\\D|\\Z)"))');
-
-#echo "$devices";
-
-count=0;
-OFS="$IFS"
-IFS=$','
-for row in $(echo "$devices" | jq -r '"\(.identification.name),\(.identification.site.name),\(.overview.signal),\(.overview.downlinkCapacity),\(.overview.uplinkCapacity),"'); do
-if (( $count == 0 )); then count=1; fi
-if (( $count == 1 )); then echo "Name: $row";
-elif (( $count == 2 )); then echo "Location: $row";
-elif (( $count == 3 )) && (( $row != 'null')); then echo "Signal: $row";
-elif (( $count == 4 )) && (( $row != 'null')); then echo "Downlink: $(($row/1000000)) Mbps";
-elif (( $count == 5 )) && (( $row != 'null')); then echo "Uplink: $(($row/1000000)) Mbps";
-elif (( $count == 6 )); then count=1; echo; echo $row; fi
-count=$(($count+1));
-done
-IFS="$OFS"
-
-if (($count == 0 )); then
-  echo No devices found containing $nn in name.
-fi
-
-echo
 echo EOF
