@@ -67,7 +67,7 @@ def generate_uisp_section(devices):
 
             uisp_outputs.append(uisp_output)
         except:
-            pass
+            uisp_outputs.append('Problem processing device')
 
     return '\n'.join(uisp_outputs)
 
