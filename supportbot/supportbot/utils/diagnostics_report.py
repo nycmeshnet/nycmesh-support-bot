@@ -59,12 +59,15 @@ def generate_uisp_section(devices):
         'Warning: UISP stats polled infrequently, may be out of date.',
         ]
     for device in devices:
-        uisp_output = get_commmon_device_description(device)
- 
-        if is_ubiquity(device):
-            uisp_output += f'{get_ubiquity_device_description(device)}'
+        try:
+            uisp_output = get_commmon_device_description(device)
+    
+            if is_ubiquity(device):
+                uisp_output += f'{get_ubiquity_device_description(device)}'
 
-        uisp_outputs.append(uisp_output)
+            uisp_outputs.append(uisp_output)
+        except:
+            pass
 
     return '\n'.join(uisp_outputs)
 
@@ -92,8 +95,9 @@ def get_report(nn):
     devices = get_uisp_devices_by_nn(nn)
 
     if is_lbe_only(devices):
-        report += f'NN {nn} is an LBE only site, some details will be omitted.\n\n'
         lbe_ip = cidr_to_ip(devices[0]['ipAddress'])
+
+        report += f'NN {nn} is an LBE only site, some details will be omitted.\n\n'
         report += ping_report(lbe_ip)
         report += lbe_traceroute_report(lbe_ip)
     else:
