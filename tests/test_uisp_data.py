@@ -1,13 +1,14 @@
 import os
 from dotenv import load_dotenv
 from supportbot.utils.uisp_data import nn_from_uisp_name, get_uisp_devices
+import pytest
 
 load_dotenv()
+on_mesh = os.environ.get("ON_MESH")
 
-# commented out so test doesn't fail off Mesh
-
-# def test_get_uisp_devices():
-#     assert len(get_uisp_devices()) > 0
+@pytest.mark.skipif(not on_mesh, reason="Not on mesh")
+def test_get_uisp_devices():
+    assert len(get_uisp_devices()) > 0
 
 def test_nn_from_uisp_name():
     assert nn_from_uisp_name("lbe-5134-diy-455") == 5134
