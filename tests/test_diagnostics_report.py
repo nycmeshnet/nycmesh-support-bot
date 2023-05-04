@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 from supportbot.utils.diagnostics_report import get_report, lbe_traceroute_report
 import pytest
 import sys
+from distutils.util import strtobool
 
 load_dotenv()
-on_mesh = os.environ.get("ON_MESH")
+on_mesh = strtobool(os.environ.get("ON_MESH"))
 
 @pytest.mark.skipif(not on_mesh or sys.platform == "win32", reason="not on mesh or on windows")
 def test_get_report_lbe_only():
