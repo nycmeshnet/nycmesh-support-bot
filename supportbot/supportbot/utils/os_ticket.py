@@ -13,8 +13,8 @@ class OsTicketClient():
             'ip': '99.99.99.99', #value required for osTicket IP authentication
             'name': name, 
             'email': email, 
-            'subject': 'Support channel request: ' + subject,
-            'message': message
+            'subject': 'Follow-up-bot: ' + name,
+            'message': message #TODO: add slack_thread_link
             }
         data_json = json.dumps(data)
 
