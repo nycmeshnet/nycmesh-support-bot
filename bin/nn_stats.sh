@@ -60,22 +60,19 @@ if (( $reachable == 0 )); then
 else
 
 echo
-echo "=====Omni Interfaces====="
-echo
-
-# print interfaces on host
-
-interfaces=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /interface print);
-echo "$interfaces";
-
-# speed test from host to sn3
-
-echo
 echo ====="Omni Speed Test"=====
 echo Speedtest from $meship to 10.10.10.100
 echo
 speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.10.10.100);
 echo "$speedtest" | grep done -A 8
+
+echo
+echo "=====Omni Interfaces====="
+echo
+
+interfaces=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /interface print);
+echo "$interfaces";
+
 
 fi
 
