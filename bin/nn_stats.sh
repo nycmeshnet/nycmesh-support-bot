@@ -75,5 +75,3 @@ echo "$interfaces";
 
 
 fi
-
-echo EOF
