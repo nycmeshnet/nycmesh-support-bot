@@ -58,6 +58,10 @@ def generate_uisp_section(devices):
         '\n=====UISP Stats=====',
         'Warning: UISP stats polled infrequently, may be out of date.',
         ]
+    
+    if devices is None or len(devices) == 0:
+        raise ValueError('Devices none or zero length but at least one is required for generate_uisp_section')
+    
     for device in devices:
         try:
             uisp_output = get_commmon_device_description(device)
@@ -94,7 +98,10 @@ def get_report(nn):
 
     devices = get_uisp_devices_by_nn(nn)
 
-    if is_lbe_only(devices):
+    if devices is None or len(devices) == 0:
+        report += f'No devices found for NN {nn} in UISP. Node may have a non standard configuration.'
+        return report
+    elif is_lbe_only(devices):
         lbe_ip = cidr_to_ip(devices[0]['ipAddress'])
 
         report += f'NN {nn} is an LBE only site, some details will be omitted.\n\n'
