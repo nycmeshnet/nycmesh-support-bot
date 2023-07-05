@@ -104,7 +104,7 @@ def get_report(nn):
     elif is_lbe_only(devices):
         lbe_ip = cidr_to_ip(devices[0]['ipAddress'])
 
-        report += f'NN {nn} is an LBE only site, some details will be omitted.\n\n'
+        report += f'NN {nn} appears to be an LBE only site, some details will be omitted.\n\n'
         report += ping_report(lbe_ip)
         report += lbe_traceroute_report(lbe_ip)
     else:
