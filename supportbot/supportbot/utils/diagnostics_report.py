@@ -25,7 +25,7 @@ def is_lbe(device):
 
 def is_ubiquity(device):
     try:
-        return device['identification']['vendor'] == 'Ubiquiti'
+        return device['identification']['vendor'] == 'Ubiquiti' or 'lbe' in device['identification']['name'].lower()
     except:
         return False
 
