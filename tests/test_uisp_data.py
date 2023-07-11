@@ -16,6 +16,9 @@ def test_nn_from_uisp_name():
     assert nn_from_uisp_name("lbe-5134") == 5134
     assert nn_from_uisp_name("5134-lbe") == 5134
     assert nn_from_uisp_name("nycmesh-lbe-136") == 136
+    assert nn_from_uisp_name("nycmesh-19-omni") == 19
+    assert nn_from_uisp_name("nycmesh-3-omni") == 3
+    
 
 if __name__ == "__main__":
     test_nn_from_uisp_name()

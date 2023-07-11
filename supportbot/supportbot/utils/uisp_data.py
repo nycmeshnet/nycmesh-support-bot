@@ -18,7 +18,7 @@ def get_uisp_devices():
     return devices
 
 def nn_from_uisp_name(uisp_name):
-    matches = re.findall("(?:^|-)(\d{3,})(?:-|$)", uisp_name)
+    matches = re.findall("(?:^|-)(\d{1,})(?:-|$)", uisp_name)
     if not matches:
         return None
 
