@@ -99,7 +99,9 @@ def get_report(nn):
     devices = get_uisp_devices_by_nn(nn)
 
     if devices is None or len(devices) == 0:
-        report += f'No devices found for NN {nn} in UISP. Node may have a non standard configuration.'
+        report += f'No devices found for NN {nn} in UISP. Node may have a non standard configuration.\n\n Attempting standard diagnostics:'
+        command = ['nn_stats.sh', str(nn)]
+        report += subprocess.run(command, capture_output=True, text=True).stdout
         return report
     elif is_lbe_only(devices):
         lbe_ip = cidr_to_ip(devices[0]['ipAddress'])
