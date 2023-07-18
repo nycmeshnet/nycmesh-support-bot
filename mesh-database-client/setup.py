@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='mesh_database_client',
-   version='1.0',
+   version='1.1',
    description='Conects to mesh install database',
    author='Andy Baumgar & Andrew Dickinson',
    author_email='support@nycmesh.net',
