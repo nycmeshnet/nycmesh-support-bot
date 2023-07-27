@@ -185,6 +185,8 @@ class DatabaseClient:
         return None
 
     def nn_to_location(self, nn):
+        if not isinstance(nn, int):
+            raise ValueError("nn must be an integer")
         row = self.signup_df[self.signup_df["NN"] == nn].iloc[0]
         return {"Latitude": row.Latitude, "Longitude": row.Longitude}
 
