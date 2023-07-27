@@ -15,7 +15,7 @@ load_dotenv()
 
 
 class DatabaseClient:
-    def __init__(self, spreadsheet_id=None):
+    def __init__(self, spreadsheet_id=None, include_active=False):
         self.spreadsheet_id = spreadsheet_id
         if self.spreadsheet_id is None:
             self.spreadsheet_id = os.environ.get("SPREADSHEET_ID")
@@ -36,7 +36,9 @@ class DatabaseClient:
         self.signup_df = self.get_signup_df()
         self.links_df = self.get_links_df()
 
-        # self.gmaps = googlemaps.Client(key=os.environ.get("MAPS_API"))
+        if include_active:
+            self.active_node_df = self.get_active_node_df()
+            self.active_link_df = self.get_active_link_df()
 
     def _get_sheets_credentials_from_env(self):
         try:
@@ -85,6 +87,8 @@ class DatabaseClient:
         df["Latitude"] = pd.to_numeric(df["Latitude"], errors="coerce")
         df["Longitude"] = pd.to_numeric(df["Longitude"], errors="coerce")
 
+        df["installDate"] = pd.to_datetime(df["installDate"], errors="coerce")
+
         df.drop(df.tail(1).index, inplace=True)
 
         return df
@@ -95,6 +99,40 @@ class DatabaseClient:
         # force columns to be specific type
         df["to"] = pd.to_numeric(df["to"], errors="coerce").fillna(0).astype(int)
         df["from"] = pd.to_numeric(df["from"], errors="coerce").fillna(0).astype(int)
+
+        return df
+
+    def get_active_node_df(self):
+        df = self.signup_df.copy()
+        df = df.sort_values(by=["installDate"])
+        df = df[df["Status"].isin(["Installed", "NN assigned"])]
+        df = df[df["NN"] != 0]
+        df = df.drop_duplicates(subset="NN", keep="first")
+
+        return df
+
+    def get_active_link_df(self):
+        df = self.links_df.copy()
+
+        columns_list = list(df.columns)
+        columns_list[6] = "to_nn"
+        columns_list[7] = "from_nn"
+
+        df.columns = columns_list
+
+        df["to"] = df["to_nn"]
+        df["from"] = df["from_nn"]
+
+        df["to"] = pd.to_numeric(df["to"], errors="coerce").fillna(0).astype(int)
+        df["from"] = pd.to_numeric(df["from"], errors="coerce").fillna(0).astype(int)
+
+        df = df[~df["status"].isin(["dead", "planned"])]
+
+        df = df[(df["to"] != 0) & (df["from"] != 0)]
+
+        # enure only active nodes are in links df
+        nns = self.active_node_df["NN"]
+        df = df[df["from"].isin(nns) & df["to"].isin(nns)]
 
         return df
 
@@ -192,6 +230,6 @@ class DatabaseClient:
 
 
 if __name__ == "__main__":
-    database_client = DatabaseClient()
+    database_client = DatabaseClient(include_active=True)
     name = database_client.name_to_nn("test")
     print(name)
