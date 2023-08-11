@@ -152,8 +152,9 @@ class DatabaseClient:
 
     def email_to_nn(self, email):
         signup_df = self.signup_df
-        email_df = signup_df.query(f'Email.str.contains("{email}")', engine="python")
-        email_df = email_df.sort_values(by=["NN"], ascending=False)
+        email_df = signup_df.query(
+            f'Email.str.contains("{email}") and NN > 0', engine="python"
+        )
 
         if email_df.empty:
             return None
