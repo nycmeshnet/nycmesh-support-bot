@@ -1,14 +1,16 @@
 from __future__ import print_function
+
+import os
 import os.path
+
+import pandas as pd
+from dotenv import load_dotenv
 from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from google.oauth2 import service_account
-import pandas as pd
-import os
-from dotenv import load_dotenv
 from numpy import sqrt
 
 load_dotenv()
@@ -149,9 +151,9 @@ class DatabaseClient:
         return nn
 
     def email_to_nn(self, email):
-        # TODO multiple emails recency
         signup_df = self.signup_df
-        email_df = signup_df[signup_df["Email"].str.contains(email, case=False)]
+        email_df = signup_df.query(f'Email.str.contains("{email}")', engine="python")
+        email_df = email_df.sort_values(by=["NN"], ascending=False)
 
         if email_df.empty:
             return None
