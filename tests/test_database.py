@@ -87,6 +87,4 @@ def test_validate_nn_abandoned():
 
 
 if __name__ == "__main__":
-    nn = database_client.email_to_nn("tinasllai@gmail.com")
-    print(nn)
-    # pass
+    pass
