@@ -7,7 +7,7 @@ import sys
 from distutils.util import strtobool
 
 load_dotenv()
-on_mesh = strtobool(os.environ.get("ON_MESH"))
+on_mesh = strtobool(os.environ.get("ON_MESH", default="False"))
 
 @pytest.mark.skipif(not on_mesh or sys.platform == "win32", reason="not on mesh or on windows")
 def test_get_report_lbe_only():
