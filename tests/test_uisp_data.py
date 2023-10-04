@@ -5,7 +5,7 @@ import pytest
 from distutils.util import strtobool
 
 load_dotenv()
-on_mesh = strtobool(os.environ.get("ON_MESH"))
+on_mesh = strtobool(os.environ.get("ON_MESH", default="False"))
 
 @pytest.mark.skipif(not on_mesh, reason="Not on mesh")
 def test_get_uisp_devices():
