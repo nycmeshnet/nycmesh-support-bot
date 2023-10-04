@@ -37,6 +37,10 @@ def is_ubiquity(device):
     except:
         return False
 
+def is_mikrotik_wireless(device):
+    if "omni" in device["idenitification"]["name"] or "sxt" in device["idenitification"]["name"]:
+        return True
+    return False
 
 def is_lbe_only(devices):
     if len(devices) == 1 and is_lbe(devices[0]):
@@ -47,23 +51,25 @@ def is_lbe_only(devices):
 def cidr_to_ip(cidr):
     return cidr.split("/")[0]
 
+def get_mikrotik_wireless_description(device):
+    return f"""
+    Connected devices:
+    {mikrotik_wireless_registration_report(device['ipAddress'])}
+    """
 
 def get_ubiquity_device_description(device):
     return f"""
-IP: {cidr_to_ip(device['ipAddress'])}
-Last seen: {human_readable_uisp_time(device['overview']['lastSeen'])}
-Signal: {device['overview']['signal']} DBm
-Downlink: {device['overview']['downlinkCapacity']/1000000} mbps
-Uplink: {device['overview']['uplinkCapacity']/1000000} mbps
-Status: {device['overview']['status']}
-Outage score: {device['overview']['outageScore']}"""
-
+    IP: {cidr_to_ip(device['ipAddress'])}
+    Signal: {device['overview']['signal']} dBm
+    Downlink: {device['overview']['downlinkCapacity']/1000000} mbps
+    Uplink: {device['overview']['uplinkCapacity']/1000000} mbps"""
 
 def get_commmon_device_description(device):
     return f"""
-Name: {device['identification']['displayName']}
-Location: {device['identification']['site']['name']}"""
-
+    Name: {device['identification']['displayName']}
+    Location: {device['identification']['site']['name']}
+    Last seen: {human_readable_uisp_time(device['overview']['lastSeen'])}
+    Status: {device['overview']['status']}"""
 
 def generate_uisp_section(devices):
     uisp_outputs = [
@@ -82,6 +88,8 @@ def generate_uisp_section(devices):
 
             if is_ubiquity(device):
                 uisp_output += f"{get_ubiquity_device_description(device)}"
+            if is_mikrotik_wireless(device):
+                uisp_output += f"{get_mikrotik_wireless_description(device)}"
 
             uisp_outputs.append(uisp_output)
         except:
@@ -112,6 +120,22 @@ def lbe_traceroute_report(ip):
         f"{lbe_username}@{ip}",
         "traceroute",
         "10.10.10.100",
+    ]
+    print(" ".join(command))
+    report += subprocess.run(command, capture_output=True, text=True).stdout
+
+    return report
+
+def mikrotik_wireless_registration_report(ip):
+    omni_pass = os.environ.get("OMNI_PASS")
+    report = ""
+    command = [
+        "sshpass",
+        "-p",
+        omni_pass,
+        "-o",
+        "StrictHostKeyChecking=no",
+        "/interface wireless registration"
     ]
     print(" ".join(command))
     report += subprocess.run(command, capture_output=True, text=True).stdout
