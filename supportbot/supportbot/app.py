@@ -14,7 +14,7 @@ from supportbot.utils.block_kit_templates import confrimation_dialog_block_kit, 
 import os
 from dotenv import load_dotenv
 
-from mesh_database_client import DatabaseClient
+from mesh_database_client import MeshDBDatabaseClient
 
 load_dotenv()
 
@@ -23,7 +23,7 @@ def run_app(config):
 
     app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-    database_client_cached = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
+    database_client_cached = MeshDBDatabaseClient()
 
     @app.shortcut("run_node_diagnostics")
     def open_modal(ack, shortcut, client):
