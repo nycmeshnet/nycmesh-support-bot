@@ -1,3 +1,4 @@
+import os
 
 from mesh_database_client import MeshDBDatabaseClient
 from dotenv import load_dotenv
@@ -14,7 +15,7 @@ class MeshUser:
         if database_client_cached:
             self._database_client = database_client_cached
         else:
-            self._database_client = MeshDBDatabaseClient()
+            self._database_client = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
         self._manual_number = manual_number
 
     def _fetch_profile(self):

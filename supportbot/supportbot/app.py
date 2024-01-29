@@ -23,7 +23,7 @@ def run_app(config):
 
     app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-    database_client_cached = MeshDBDatabaseClient()
+    database_client_cached = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
 
     @app.shortcut("run_node_diagnostics")
     def open_modal(ack, shortcut, client):
