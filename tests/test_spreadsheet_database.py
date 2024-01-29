@@ -8,7 +8,9 @@ load_dotenv()
 # spreadsheet_id = os.environ.get("SPREADSHEET_ID")
 spreadsheet_id = os.environ.get("SPREADSHEET_ID_TEST")
 
-database_client = mesh_database_client.DatabaseClient(spreadsheet_id=spreadsheet_id)
+database_client = mesh_database_client.SpreadsheetDatabaseClient(
+    spreadsheet_id=spreadsheet_id
+)
 
 # name to nn
 

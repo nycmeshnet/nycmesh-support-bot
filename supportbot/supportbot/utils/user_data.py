@@ -1,9 +1,7 @@
-import os
 
-from mesh_database_client import DatabaseClient
+from mesh_database_client import MeshDBDatabaseClient
 from dotenv import load_dotenv
 import re
-import json
 
 load_dotenv()
 
@@ -16,7 +14,7 @@ class MeshUser:
         if database_client_cached:
             self._database_client = database_client_cached
         else:
-            self._database_client = DatabaseClient(os.environ.get("SPREADSHEET_ID"))
+            self._database_client = MeshDBDatabaseClient()
         self._manual_number = manual_number
 
     def _fetch_profile(self):
