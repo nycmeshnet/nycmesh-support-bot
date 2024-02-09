@@ -7,13 +7,13 @@ import re
 load_dotenv()
 
 class MeshUser:
-    def __init__(self, app, user_id, network_number_property_id, manual_number=None, database_client_cached=None):
+    def __init__(self, app, user_id, network_number_property_id, manual_number=None, database_client=None):
         self._app = app
         self.user_id = user_id
         self._fetched = False
         self._network_number_property_id = network_number_property_id
-        if database_client_cached:
-            self._database_client = database_client_cached
+        if database_client:
+            self._database_client = database_client
         else:
             self._database_client = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
         self._manual_number = manual_number
