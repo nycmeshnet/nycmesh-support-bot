@@ -23,14 +23,14 @@ def run_app(config):
 
     app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-    database_client_cached = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
+    database_client = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
 
     @app.shortcut("run_node_diagnostics")
     def open_modal(ack, shortcut, client):
         ack()
 
         user_id = shortcut['message']['user']
-        user = MeshUser(app, user_id, config['nn_property_id'], database_client_cached=database_client_cached)
+        user = MeshUser(app, user_id, config['nn_property_id'], database_client=database_client)
         nn = user.network_number
         message = shortcut['message']
 
@@ -83,7 +83,7 @@ def run_app(config):
         ack()
 
         metadata = json.loads(body['actions'][0]['value'])
-        user = MeshUser(app, metadata['user'], config['nn_property_id'], database_client_cached=database_client_cached)
+        user = MeshUser(app, metadata['user'], config['nn_property_id'], database_client=database_client)
         nn = user.network_number
 
         app.client.views_open(
