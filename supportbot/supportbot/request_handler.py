@@ -9,13 +9,21 @@ def nn_to_map_url(nn):
     base = 'https://www.nycmesh.net/map/nodes/'
     return f'<{base}-{nn}|NN{nn}>'
 
-def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None, at_member = True):
+def handle_support_request(app, config, user_id, channel_id, message_ts, manual_number=None):
     user = MeshUser(app, user_id, config['nn_property_id'], manual_number=manual_number)
 
-    if at_member:
-        text = f"This is a reply to <@{user_id}>! It looks like your email is {user.email} {'and' if user.network_number else 'but'} your network number {'is ' + nn_to_map_url(user.network_number) if user.network_number else 'could not be found'}. {f'Diagnostic report running...' if user.network_number else ''}"
+    if not user.network_number:
+        text = (
+            "A network number was not provided and could not be found automatically. "
+            "A volunteer will assist you shortly. Please try to find your network or "
+            "install number so that we can locate your connection in our systems."
+        )
     else:
-        text = f"The network number {'is ' + nn_to_map_url(user.network_number) if user.network_number else 'could not be found'}. {f'Diagnostic report running...' if user.network_number else ''}"
+        text = (
+            f"The network number {'entered was' if manual_number else ''} "
+            f"{nn_to_map_url(user.network_number) + (' was automatically detected' if not manual_number else '')}. "
+            f"Diagnostic report running..."
+        )
 
     app.client.chat_postMessage(
         channel=channel_id,
