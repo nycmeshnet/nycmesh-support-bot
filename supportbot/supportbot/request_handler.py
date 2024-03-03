@@ -24,6 +24,14 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
     )
 
     if user.network_number:
-        report_text = get_report(user.network_number)
+        try:
+            report_text = get_report(user.network_number)
 
-        upload_report_file(app, report_text, channel_id, message_ts, user.network_number, "Here's a diagnostics report to help our volunteers:")
+            upload_report_file(app, report_text, channel_id, message_ts, user.network_number, "Here's a diagnostics report to help our volunteers:")
+        except Exception as e:
+            app.client.chat_postMessage(
+                channel=channel_id,
+                thread_ts=message_ts,
+                text="An error was encountered while attempting to run diagnostics. Please try again later."
+            )
+            raise e
