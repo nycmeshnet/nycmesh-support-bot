@@ -3,7 +3,8 @@ import json
 from dotenv import load_dotenv
 import os
 import re
-from datetime import datetime
+from datetime import datetime, tzinfo
+from dateutil import tz
 
 load_dotenv()
 
@@ -42,7 +43,9 @@ def get_uisp_devices_by_nn(nn):
         return None
     return devices
 
-def human_readable_uisp_time(uisp_time_string):
-    date_object = datetime.fromisoformat(uisp_time_string.replace("Z", "+00:00"))
-    human_time_string = date_object.strftime("%Y-%m-%d %H:%M:%S")
+def human_readable_uisp_time(uisp_time_string: str, target_time_zone: tzinfo):
+    date_object_utc = datetime.fromisoformat(uisp_time_string.replace("Z", "+00:00"))
+    date_object_local = date_object_utc.astimezone(target_time_zone)
+
+    human_time_string = date_object_local.strftime("%Y-%m-%d %H:%M:%S")
     return human_time_string

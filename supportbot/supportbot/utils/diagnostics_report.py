@@ -1,4 +1,6 @@
 import datetime
+
+from dateutil import tz
 from pytz import timezone
 import subprocess
 from supportbot.utils.uisp_data import get_uisp_devices_by_nn, human_readable_uisp_time
@@ -51,7 +53,7 @@ def cidr_to_ip(cidr):
 def get_ubiquity_device_description(device):
     return f"""
 IP: {cidr_to_ip(device['ipAddress'])}
-Last seen: {human_readable_uisp_time(device['overview']['lastSeen'])}
+Last seen: {human_readable_uisp_time(device['overview']['lastSeen'], tz.gettz('America/New_York'))}
 Signal: {device['overview']['signal']} DBm
 Downlink: {device['overview']['downlinkCapacity']/1000000} mbps
 Uplink: {device['overview']['uplinkCapacity']/1000000} mbps
