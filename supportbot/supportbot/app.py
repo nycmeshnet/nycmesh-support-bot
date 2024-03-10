@@ -57,13 +57,7 @@ def run_app(config):
         else:
             manual_number = None
 
-        at_member_input = view['state']['values']['checkboxInputBlock']['at_message_toggle-action']['selected_options']
-        if len(at_member_input) > 0:
-            at_member = True
-        else:
-            at_member = False
-
-        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number, at_member=at_member)
+        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
     # Automated response flow in response to message in Support channel
 
@@ -130,7 +124,7 @@ def run_app(config):
             manual_number = manual_number_input['value']
         else:
             manual_number = None
-        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number, at_member = False)
+        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
 
     SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()
