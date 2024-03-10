@@ -14,9 +14,10 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
 
     if not user.network_number:
         text = (
-            "A network number was not provided and could not be found automatically. "
-            "A volunteer will assist you shortly. Please try to find your network or "
-            "install number so that we can locate your connection in our systems."
+            "The Install Number could not be automatically determined.  You can find your "
+            "Install Number by searching the registered email for the Subject "
+            "\"NYC Mesh Rooftop Install.\"  Providing this number will help volunteers locate "
+            "your number in our system to better assist you."
         )
     else:
         text = (
