@@ -3,6 +3,6 @@ import os
 MESHDB_API_ENDPOINT_BASE = os.environ["MESHDB_API_ENDPOINT_BASE"]
 
 
-MEMBER_LOOKUP_ENDPOINT = os.path.join(MESHDB_API_ENDPOINT_BASE, "member/lookup/")
-INSTALL_LOOKUP_ENDPOINT = os.path.join(MESHDB_API_ENDPOINT_BASE, "install/lookup/")
+MEMBER_LOOKUP_ENDPOINT = os.path.join(MESHDB_API_ENDPOINT_BASE, "members/lookup/")
+INSTALL_LOOKUP_ENDPOINT = os.path.join(MESHDB_API_ENDPOINT_BASE, "installs/lookup/")
 BUILDINGS_ENDPOINT = os.path.join(MESHDB_API_ENDPOINT_BASE, "buildings/")

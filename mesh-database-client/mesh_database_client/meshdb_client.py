@@ -19,7 +19,7 @@ class MeshDBDatabaseClient(DatabaseClient):
     def _member_id_to_nn(self, member_id):
         install_query_response = self.requests_sesssion.get(
             endpoints.INSTALL_LOOKUP_ENDPOINT,
-            params={"member": member_id, "install_status": "Active"},
+            params={"member": member_id, "status": "Active"},
         )
         install_query_response.raise_for_status()
         install_query_json = install_query_response.json()
@@ -51,7 +51,7 @@ class MeshDBDatabaseClient(DatabaseClient):
 
     def email_to_nn(self, email):
         member_query_response = self.requests_sesssion.get(
-            endpoints.MEMBER_LOOKUP_ENDPOINT, params={"email": email}
+            endpoints.MEMBER_LOOKUP_ENDPOINT, params={"email_address": email}
         )
         member_query_response.raise_for_status()
         member_query_json = member_query_response.json()
@@ -73,7 +73,7 @@ class MeshDBDatabaseClient(DatabaseClient):
         # Check if this looks like an NN
         nn_query_response = self.requests_sesssion.get(
             endpoints.INSTALL_LOOKUP_ENDPOINT,
-            params={"network_number": input_number, "install_status": "Active"},
+            params={"network_number": input_number, "status": "Active"},
         )
         nn_query_response.raise_for_status()
         nn_query_json = nn_query_response.json()
@@ -85,7 +85,7 @@ class MeshDBDatabaseClient(DatabaseClient):
         # Hm, this doesn't look like an NN, maybe it's an install number?
         install_num_query_response = self.requests_sesssion.get(
             endpoints.INSTALL_LOOKUP_ENDPOINT,
-            params={"network_number": input_number, "install_status": "Active"},
+            params={"network_number": input_number, "status": "Active"},
         )
         install_num_query_response.raise_for_status()
         install_num_query_json = install_num_query_response.json()
