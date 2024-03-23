@@ -9,7 +9,7 @@ from dateutil import tz
 load_dotenv()
 
 def get_uisp_devices():
-    response = requests.get("https://uisp.mesh.nycmesh.net/nms/api/v2.1/devices", headers={'x-auth-token': os.environ.get('NYCMESH_TOOL_AUTH_TOKEN')}, verify=False)
+    response = requests.get("https://uisp.mesh.nycmesh.net/nms/api/v2.1/devices", headers={'x-auth-token': os.environ.get('UISP_AUTH_TOKEN')}, verify=False)
 
     devices = json.loads(response.content)
 
