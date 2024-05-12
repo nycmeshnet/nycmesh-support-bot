@@ -84,15 +84,14 @@ class MeshDBDatabaseClient(DatabaseClient):
 
         # Hm, this doesn't look like an NN, maybe it's an install number?
         install_num_query_response = self.requests_sesssion.get(
-            endpoints.INSTALL_LOOKUP_ENDPOINT,
-            params={"network_number": input_number, "status": "Active"},
+            endpoints.INSTALL_GET_ENDPOINT + str(input_number) + '/'
         )
         install_num_query_response.raise_for_status()
         install_num_query_json = install_num_query_response.json()
 
-        if install_num_query_json["results"]:
+        if install_num_query_json["status"] == "Active":
             # We found an install for this as an install number, translate that to an NN
-            return install_num_query_json["results"][0]["network_number"]
+            return install_num_query_json["network_number"]
 
         return None
 

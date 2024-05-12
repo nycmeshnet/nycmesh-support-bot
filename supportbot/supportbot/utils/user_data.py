@@ -7,7 +7,7 @@ import re
 load_dotenv()
 
 class MeshUser:
-    def __init__(self, app, user_id, network_number_property_id, manual_number=None, database_client=None):
+    def __init__(self, app, user_id, network_number_property_id, database_client=None):
         self._app = app
         self.user_id = user_id
         self._fetched = False
@@ -16,7 +16,6 @@ class MeshUser:
             self._database_client = database_client
         else:
             self._database_client = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
-        self._manual_number = manual_number
 
     def _fetch_profile(self):
         if self._fetched:
@@ -41,12 +40,6 @@ class MeshUser:
     @property
     def network_number(self):
         self._fetch_profile()
-
-        # user entered manual input
-        if self._manual_number:
-            manual_nn = self._database_client.get_nn(int(self._manual_number))
-            if manual_nn is not None:
-                return manual_nn
 
         slack_nn_raw = self._profile.get('fields', {}).get(self._network_number_property_id, None)
         if slack_nn_raw:        
