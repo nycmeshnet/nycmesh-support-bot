@@ -1,7 +1,11 @@
 name: Nighty Restart
+
 on: 
   schedule:
   - cron: "0 3 * * *"
+
+permissions: read-all
+
 jobs:
   Restart:
     runs-on: [self-hosted, daniel-server]

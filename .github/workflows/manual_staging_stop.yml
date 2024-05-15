@@ -3,6 +3,8 @@ name: Manual staging stop
 on:
   workflow_dispatch
 
+permissions: read-all
+
 jobs:
   Run:
     runs-on: [self-hosted, andy-server]
