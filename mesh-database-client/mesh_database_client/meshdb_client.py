@@ -65,35 +65,38 @@ class MeshDBDatabaseClient(DatabaseClient):
         return self._member_id_to_nn(member_id)
 
     def get_nn(self, input_number):
-        if input_number is None:
+        try:
+            if input_number is None:
+                return None
+
+            input_number = int(input_number)
+
+            # Check if this looks like an NN
+            nn_query_response = self.requests_sesssion.get(
+                endpoints.INSTALL_LOOKUP_ENDPOINT,
+                params={"network_number": input_number, "status": "Active"},
+            )
+            nn_query_response.raise_for_status()
+            nn_query_json = nn_query_response.json()
+
+            if nn_query_json["results"]:
+                # We found valid installs for this NN, return it to the caller unchanged
+                return input_number
+
+            # Hm, this doesn't look like an NN, maybe it's an install number?
+            install_num_query_response = self.requests_sesssion.get(
+                endpoints.INSTALL_GET_ENDPOINT + str(input_number) + '/'
+            )
+            install_num_query_response.raise_for_status()
+            install_num_query_json = install_num_query_response.json()
+
+            if install_num_query_json["status"] == "Active":
+                # We found an install for this as an install number, translate that to an NN
+                return install_num_query_json["network_number"]
+
             return None
-
-        input_number = int(input_number)
-
-        # Check if this looks like an NN
-        nn_query_response = self.requests_sesssion.get(
-            endpoints.INSTALL_LOOKUP_ENDPOINT,
-            params={"network_number": input_number, "status": "Active"},
-        )
-        nn_query_response.raise_for_status()
-        nn_query_json = nn_query_response.json()
-
-        if nn_query_json["results"]:
-            # We found valid installs for this NN, return it to the caller unchanged
-            return input_number
-
-        # Hm, this doesn't look like an NN, maybe it's an install number?
-        install_num_query_response = self.requests_sesssion.get(
-            endpoints.INSTALL_GET_ENDPOINT + str(input_number) + '/'
-        )
-        install_num_query_response.raise_for_status()
-        install_num_query_json = install_num_query_response.json()
-
-        if install_num_query_json["status"] == "Active":
-            # We found an install for this as an install number, translate that to an NN
-            return install_num_query_json["network_number"]
-
-        return None
+        except requests.exceptions.RequestException:
+            return None
 
 
 if __name__ == "__main__":
