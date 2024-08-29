@@ -8,6 +8,8 @@
 
 Slack chatbot to help with NYC Mesh support requests
 
+![GIF showing usage of supportbot in NYC Mesh Slack](https://github.com/user-attachments/assets/8c49a902-9cd1-41c9-ad38-de8acbf2a2fc)
+
 ## Usage
 
 Use the included CLI to run the server like so:
