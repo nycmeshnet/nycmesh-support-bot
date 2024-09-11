@@ -152,3 +152,40 @@ def help_suggestion_dialog_block_kit(channel_id, message_ts, user_id, nn=None):
             }},
         ]
     }
+
+
+def confirmation_of_bad_nn_block_kit(channel_id, message_ts, user_id, network_number, message):
+    return {
+        "blocks": [
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": message
+                    }
+                ]
+            },
+            {
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "I understand, run anyway"
+                        },
+                        "value":
+                            json.dumps({
+                                'channel': channel_id,
+                                'ts': message_ts,
+                                'user': user_id,
+                                'network_number_override': network_number,
+                            }),
+                        "action_id": "confirm_bad_network_number",
+                    },
+                ]
+            },
+        ]
+    }
