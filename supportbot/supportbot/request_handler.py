@@ -30,6 +30,7 @@ def handle_support_request(app, config, user_id, channel_id, message_ts, manual_
             text = (
                 f"The network number entered was {nn_to_map_url(network_number)}" +
                 (f" (via install #{manual_number})" if int(manual_number) != int(network_number) else "") +
+                (f". This node could not be found in MeshDB, continuing anyway due to an override" if force_nn else "") +
                 f". Diagnostic report running..."
             )
         else:
