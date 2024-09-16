@@ -44,6 +44,23 @@ def run_app(config):
             )
         )
 
+    @app.action("confirm_bad_network_number")
+    def confirm_bad_network_number(ack, body, logger, view, action, shortcut):
+        ack()
+
+        metadata = json.loads(action['value'])
+        network_number = metadata['network_number_override']
+
+        requests.post(body['response_url'], json = {
+            'response_type': 'ephemeral',
+            'text': '',
+            'replace_original': True,
+            'delete_original': True
+        })
+
+        handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'],
+                               manual_number=network_number, force_nn=True)
+
     # Manual shorcut button flow
 
     @app.view("manually_run_diagnostics")
