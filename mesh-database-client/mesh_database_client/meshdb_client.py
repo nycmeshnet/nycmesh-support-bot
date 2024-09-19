@@ -30,10 +30,10 @@ class MeshDBDatabaseClient(DatabaseClient):
         # If there are multiple active installs for this member, arbitrary select the first one
         install = install_query_json["results"][0]
 
-        if not install["network_number"]:
+        if not install["node"]["network_number"]:
             return None
 
-        return install["network_number"]
+        return install["node"]["network_number"]
 
     def name_to_nn(self, name):
         member_query_response = self.requests_sesssion.get(
@@ -90,9 +90,9 @@ class MeshDBDatabaseClient(DatabaseClient):
             install_num_query_response.raise_for_status()
             install_num_query_json = install_num_query_response.json()
 
-            if install_num_query_json["status"] == "Active":
+            if install_num_query_json["status"] == "Active" and install_num_query_json["node"]:
                 # We found an install for this as an install number, translate that to an NN
-                return install_num_query_json["network_number"]
+                return install_num_query_json["node"]["network_number"]
 
             return None
         except requests.exceptions.RequestException:
