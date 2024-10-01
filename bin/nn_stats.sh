@@ -16,8 +16,8 @@ echo "Network Number: $1";
 # test if input is a number under 8000
 
 if (( $1 )) 2>/dev/null; then
-  if (( $1 > 8000 )) ; then
-    echo "FATAL: Network numbers are below 8000."
+  if (( $1 < 0 )) ; then
+    echo "FATAL: Network numbers are greater than 0."
     exit
   fi
 else
