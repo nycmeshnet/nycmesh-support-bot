@@ -6,7 +6,7 @@ import click
 from supportbot.constants import DEFAULT_CHANNEL_IDS, DEFAULT_NETWORK_NUMBER_PROPERTY_ID
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 @click.command()
 
