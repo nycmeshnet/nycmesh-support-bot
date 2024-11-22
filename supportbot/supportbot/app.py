@@ -143,5 +143,8 @@ def run_app(config):
             manual_number = None
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
+    @app.event(event={"type": "message"})
+    def no_op_for_other_messages_to_supress_warnings(message):
+        pass
 
     SocketModeHandler(app, os.environ.get("SLACK_APP_TOKEN")).start()
