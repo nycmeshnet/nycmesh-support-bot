@@ -17,7 +17,7 @@ class MeshDBDatabaseClient(DatabaseClient):
     def __init__(self, mesh_db_auth_token):
         self.requests_sesssion = requests.Session()
         self.requests_sesssion.headers['Authorization'] = f"Token {mesh_db_auth_token}"
-        self.logger = logging.Logger("MeshDBClient")
+        self.logger = logging.getLogger("MeshDBClient")
 
     def _member_id_to_nn(self, member_id):
         self.logger.info(f"Converting member ID: {member_id} to NN")
