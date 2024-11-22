@@ -26,12 +26,15 @@ def run_app(config):
     database_client = MeshDBDatabaseClient(os.environ.get("MESHDB_AUTH_TOKEN"))
 
     @app.shortcut("run_node_diagnostics")
-    def open_modal(ack, shortcut, client):
+    def open_modal(ack, shortcut, client, logger):
         ack()
 
         user_id = shortcut['message']['user']
+        logger.info(f"Modal opened by user ID: {user_id}")
+
         user = MeshUser(app, user_id, config['nn_property_id'], database_client=database_client)
         nn = user.network_number
+        logger.info(f"Detected Network number: {nn}")
         message = shortcut['message']
 
         resp = client.views_open(
@@ -47,6 +50,7 @@ def run_app(config):
     @app.action("confirm_bad_network_number")
     def confirm_bad_network_number(ack, body, logger, view, action, shortcut):
         ack()
+        logger.info(f"Received 'trust me bro', running despite NN seeming not real")
 
         metadata = json.loads(action['value'])
         network_number = metadata['network_number_override']
@@ -74,6 +78,7 @@ def run_app(config):
         else:
             manual_number = None
 
+        logger.info(f"Received request to run diagnostics manually, with NN/install number set to: {manual_number}")
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
     # Automated response flow in response to message in Support channel
@@ -85,7 +90,8 @@ def run_app(config):
             is_first_message_in_thread
         ]
     )
-    def respond_with_help_suggestion(message):
+    def respond_with_help_suggestion(message, logger):
+        logger.info(f"Got message in support channel, prompting user with help suggestion...")
         root_message_ts = message['thread_ts'] if 'thread_ts' in message else message['ts']
         app.client.chat_postEphemeral(
             channel=message['channel'],
@@ -102,6 +108,8 @@ def run_app(config):
         metadata = json.loads(body['actions'][0]['value'])
         user = MeshUser(app, metadata['user'], config['nn_property_id'], database_client=database_client)
         nn = user.network_number
+
+        logger.info(f"User {metadata['user']} clicked 'Run Diagnostics', suggesing default nn/install number: {nn}")
 
         app.client.views_open(
             trigger_id=body["trigger_id"],
@@ -123,6 +131,7 @@ def run_app(config):
     @app.action("run_suggestion_button_no")
     def run_suggestion_button_no(ack, body, logger):
         ack()
+        logger.info(f"User dismissed diagnostics request")
 
         requests.post(body['response_url'], json = {
             'response_type': 'ephemeral',
@@ -141,6 +150,8 @@ def run_app(config):
             manual_number = manual_number_input['value']
         else:
             manual_number = None
+
+        logger.info(f"Received request to run diagnostics from prompt flow, with NN/install number set to: {manual_number}")
         handle_support_request(app, config, metadata['user'], metadata['channel'], metadata['ts'], manual_number=manual_number)
 
     @app.event(event={"type": "message"})
