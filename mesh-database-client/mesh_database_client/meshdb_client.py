@@ -95,15 +95,14 @@ class MeshDBDatabaseClient(DatabaseClient):
             input_number = int(input_number)
 
             # Check if this looks like an NN
-            nn_query_response = self.requests_sesssion.get(
-                endpoints.INSTALL_LOOKUP_ENDPOINT,
-                params={"network_number": input_number, "status": "Active"},
+            node_query_response = self.requests_sesssion.get(
+                endpoints.NODE_GET_ENDPOINT + str(input_number) + '/'
             )
-            nn_query_response.raise_for_status()
-            nn_query_json = nn_query_response.json()
+            node_query_response.raise_for_status()
+            node_query_json = node_query_response.json()
 
-            if nn_query_json["results"]:
-                # We found valid installs for this NN, return it to the caller unchanged
+            if node_query_json["status"] == "Active":
+                # We found a valid Node for this NN, return it to the caller unchanged
                 return input_number
 
             # Hm, this doesn't look like an NN, maybe it's an install number?
