@@ -71,7 +71,6 @@ echo "=====Omni Interfaces====="
 echo
 
 interfaces=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /interface print);
-echo "$interfaces";
-
+echo "$interfaces" | sed '/;;;/ s/\(#\([0-9]\+\)\).*/\1/' # redact interface comments by hiding text after install number symbol #
 
 fi
