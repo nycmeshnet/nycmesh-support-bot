@@ -6,10 +6,16 @@ import re
 from datetime import datetime, tzinfo
 from dateutil import tz
 
+import logging
+logger = logging.getLogger("uisp_data.py")
+
 load_dotenv()
 
 def get_uisp_devices():
     response = requests.get("https://uisp.mesh.nycmesh.net/nms/api/v2.1/devices", headers={'x-auth-token': os.environ.get('UISP_AUTH_TOKEN')}, verify=False)
+
+    if response.status_code != 200:
+        logger.error(f"UISP request error: {response}")
 
     devices = json.loads(response.content)
 

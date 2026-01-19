@@ -7,6 +7,9 @@ from supportbot.utils.uisp_data import get_uisp_devices_by_nn, human_readable_ui
 from dotenv import load_dotenv
 import os
 
+import logging
+logger = logging.getLogger("diagnostics_report.py")
+
 load_dotenv()
 
 
@@ -122,8 +125,13 @@ def lbe_traceroute_report(ip):
 
 def run_nn_stats(nn):
     command = ["nn_stats.sh", str(nn)]
-    nn_stats_output_raw = subprocess.run(command, capture_output=True).stdout
+    nn_stats_output_all = subprocess.run(command, capture_output=True)
+    nn_stats_output_raw = nn_stats_output_all.stdout
     nn_stats_output = nn_stats_output_raw.decode("utf-8", errors="ignore")
+    nn_stats_errors_raw = nn_stats_output_all.stderr
+    nn_stats_errors = nn_stats_errors_raw.decode("utf-8", errors="ignore")
+    if nn_stats_errors:
+        logger.error(nn_stats_errors)
     return nn_stats_output
 
 
