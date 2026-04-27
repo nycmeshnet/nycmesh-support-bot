@@ -1,5 +1,22 @@
 #!/bin/bash
 
+nn=$1;
+
+# Routers to be exempted from speed tests
+ROUTERS_NO_SPEEDTEST="10 162 713 5916"
+
+function exists_in_list() {
+    LIST=$1
+    VALUE=$2
+    for x in $LIST; do
+      x=`echo $x | tr -d '"'`
+        if [ "$x" = "$VALUE" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 # Read .env file
 # Stolen from https://gist.github.com/mihow/9c7f559807069a03e302605691f85572?permalink_comment_id=3625310#gistcomment-3625310
 set -a
@@ -27,7 +44,6 @@ fi
 
 # convert number to ip octets
 
-nn=$1;
 
 ipfourthoctet=$(($nn%100));
 ipthirdoctet=$((($nn-$ipfourthoctet)/100));
@@ -59,12 +75,16 @@ if (( $reachable == 0 )); then
   echo Skipping device-side statistics...
 else
 
-echo
-echo ====="Omni Speed Test"=====
-echo Speedtest from $meship to 10.10.10.100
-echo
-speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.10.10.100);
-echo "$speedtest" | grep done -A 8
+if exists_in_list "$ROUTERS_NO_SPEEDTEST" "$nn"; then
+  echo "$nn is a backbone site and is prohibited from router speed tests to maintain stability. Please test directly on the device off-hours if required"
+else
+  echo
+  echo ====="Omni Speed Test"=====
+  echo Speedtest from $meship to 10.10.10.100
+  echo
+  speedtest=$(sshpass -p$OMNI_PASS ssh -o StrictHostKeyChecking=no admin@$meship /tool speed-test test-duration=5 10.10.10.100);
+  echo "$speedtest" | grep done -A 8
+fi
 
 echo
 echo "=====Omni Interfaces====="
